@@ -8,7 +8,7 @@ export const ProfileWidget: FC<user> = ({ username }) => {
   const dispatch = useAppDispatch();
   return (
     <div>
-      <div className="flex justify-between mt-5 items-center">
+      <header className="flex justify-between mt-5 items-center">
         <div className="flex">
           <div className="w-[100px] h-[100px] bg-black rounded-full"></div>
           <ul>
@@ -25,7 +25,15 @@ export const ProfileWidget: FC<user> = ({ username }) => {
             Log out
           </Button>
         </div>
-      </div>
+      </header>
+
+      <section className="mt-5">
+        <div>
+          <Button variant="outlined" onClick={() => {}}>
+            create review
+          </Button>
+        </div>
+      </section>
     </div>
   );
 };
