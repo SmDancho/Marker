@@ -14,9 +14,11 @@ export const LangSwitcher = () => {
   };
 
   useEffect(() => {
+    localStorage.setItem('lang', lang);
     setLang(localStorage.getItem('lang') as string);
+    translate.changeLanguage(lang);
   });
-  
+
   return (
     <>
       <Select

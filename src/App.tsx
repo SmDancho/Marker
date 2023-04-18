@@ -6,7 +6,7 @@ import { MainPage } from './Pages/Main';
 import { PostPage } from './Pages/postPage';
 import { SearchedPostsPage } from './Pages/searchedPost';
 import { Routes, Route } from 'react-router-dom';
-import { UpdateForm } from './entities/updateForm';
+import { UpdateForm } from './components/updateForm';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
 

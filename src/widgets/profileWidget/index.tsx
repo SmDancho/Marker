@@ -9,7 +9,7 @@ import { useAppDispatch, useAppSelector } from '../../redux/store';
 import { logout } from '../../redux/auth';
 import { getUserPosts } from '../../redux/posts';
 
-import { PostForm } from '../../entities/createPostForm';
+import { PostForm } from '../../components/createPostForm';
 import { UserPosts } from '../userPosts';
 
 import type { user } from '../../types';
