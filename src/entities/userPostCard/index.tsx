@@ -22,39 +22,36 @@ export const UserPostCard: FC<post> = ({ title, image, _id, text }) => {
   const dispatch = useAppDispatch();
   return (
     <>
-      <div className=" mt-5 w-[300px] rounded-lg p-2 hover:bg-[#98c5f380] transition-all">
-        <Dialog
-          open={confirm}
-          onClose={() => setConfirm(false)}
-          PaperComponent={Paper}
-        >
-          <DialogTitle style={{ cursor: 'move' }} id="draggable-dialog-title">
-            Warning you are trying to delete post
-          </DialogTitle>
-          <DialogContent>
-            <DialogContentText>To delete post press delete</DialogContentText>
-          </DialogContent>
-          <DialogActions>
-            <Button autoFocus onClick={() => setConfirm(false)}>
-              {translate.t('cancel')}
-            </Button>
-            <Button
-              color="error"
-              onClick={() => {
-                setConfirm(false);
-                dispatch(deletePost(_id));
-              }}
-            >
-              {translate.t('delete')}
-            </Button>
-          </DialogActions>
-        </Dialog>
-
+      <Dialog
+        open={confirm}
+        onClose={() => setConfirm(false)}
+        PaperComponent={Paper}
+      >
+        <DialogTitle style={{ cursor: 'move' }} id="draggable-dialog-title">
+          Warning you are trying to delete post
+        </DialogTitle>
+        <DialogContent>
+          <DialogContentText>To delete post press delete</DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button autoFocus onClick={() => setConfirm(false)}>
+            {translate.t('cancel')}
+          </Button>
+          <Button
+            color="error"
+            onClick={() => {
+              setConfirm(false);
+              dispatch(deletePost(_id));
+            }}
+          >
+            {translate.t('delete')}
+          </Button>
+        </DialogActions>
+      </Dialog>
+      <div className="flex items-center shadow-xl  justify-between  mt-5 rounded-lg p-5 hover:bg-[#98c5f380] transition-all">
         <div>{title}</div>
-        <div className="w-fell h-[200px] mb-5">
-          <img className="w-full h-full block" src={`${image}`} alt="" />
-        </div>
-        <div className="flex gap-2 items-center">
+
+        <div className="flex gap-2 items-center ">
           <Link to={`/Post/${_id}`}>
             <Button variant="outlined"> {translate.t('post')}</Button>
           </Link>

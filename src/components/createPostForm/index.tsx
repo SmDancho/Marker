@@ -7,12 +7,13 @@ import Autocomplete from '@mui/material/Autocomplete';
 import InputLabel from '@mui/material/InputLabel';
 import LoadingButton from '@mui/lab/LoadingButton';
 import Alert from '@mui/material/Alert';
+import Chip from '@mui/material/Chip';
 
 import { FileUploader } from 'react-drag-drop-files';
 import SimpleMDE from 'react-simplemde-editor';
 import 'easymde/dist/easymde.min.css';
 
-import { addpost, saveTags, getTags } from '../../redux/posts';
+import { addpost, getTags } from '../../redux/posts';
 import { useAppDispatch, useAppSelector } from '../../redux/store';
 import type { RootState } from '../../redux/store';
 
@@ -22,22 +23,19 @@ export const PostForm = () => {
   const [image, setImg] = useState<{ name: string }>();
   const [text, setText] = useState<string>('');
   const [group, setGroup] = useState<string>('');
-  const [tagsState, setTags] = useState<string>('');
+
+  const [tagString, setTagsString] = useState<string>('');
+  const [activeTags, setActiveTags] = useState<string[]>([]);
+
   const [authorRaiting, setAuthorRaiting] = useState<unknown | null>(null);
 
-  const deboncedValue: string = useDebounce(tagsState);
+  const deboncedValue: string = useDebounce(tagString);
   const fileTypes = ['JPG', 'PNG', 'GIF'];
-  const { tags, isLoading, allTags, error } = useAppSelector(
+  const { isLoading, allTags, error } = useAppSelector(
     (state: RootState) => state.userPosts
   );
 
   const dispatch = useAppDispatch();
-
-  useMemo(() => {
-    if (deboncedValue) {
-      dispatch(saveTags(deboncedValue));
-    }
-  }, [deboncedValue]);
 
   useEffect(() => {
     dispatch(getTags());
@@ -51,7 +49,7 @@ export const PostForm = () => {
         image,
         text,
         group,
-        tags,
+        tags: activeTags,
         authorRaiting: authorRaiting as number,
       })
     );
@@ -59,6 +57,7 @@ export const PostForm = () => {
 
   const tagsOption: string[] = [...allTags];
   tagsOption.push(deboncedValue);
+
 
   const textOptions = useMemo(() => {
     return {
@@ -99,32 +98,47 @@ export const PostForm = () => {
             }}
           />
         </div>
+
         <Autocomplete
           multiple
+          id="tags-filled"
           options={tagsOption}
-          getOptionLabel={(option) => {
-            return option;
+          freeSolo
+          onChange={(_, newValue) => {
+            setActiveTags(newValue);
+          }}
+          onInputChange={(event, newInputValue) => {
+            setTagsString(newInputValue);
           }}
           renderInput={(params) => (
             <TextField
               {...params}
-              label="Tags"
-              placeholder="Tags"
-              onChange={(e) => {
-                setTags(e.target.value);
-              }}
+              variant="filled"
+              label="freeSolo"
+              placeholder="Favorites"
             />
           )}
         />
-        <TextField
-          label="*Author raiting"
-          helperText="authorRaiting is required"
-          variant="outlined"
-          type="number"
-          onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-            setAuthorRaiting(e.target.value as unknown);
-          }}
-        />
+
+        <InputLabel id="your-mark">*your mark (from 1 to 10)</InputLabel>
+        <Select
+          className="w-[10%]"
+          labelId="your-mark"
+          value={authorRaiting}
+          onChange={(e) => setAuthorRaiting(e.target.value as unknown)}
+        >
+          <MenuItem value={1}>1</MenuItem>
+          <MenuItem value={2}>2</MenuItem>
+          <MenuItem value={3}>3</MenuItem>
+          <MenuItem value={4}>4</MenuItem>
+          <MenuItem value={5}>5</MenuItem>
+          <MenuItem value={6}>6</MenuItem>
+          <MenuItem value={7}>7</MenuItem>
+          <MenuItem value={8}>8</MenuItem>
+          <MenuItem value={9}>9</MenuItem>
+          <MenuItem value={10}>10</MenuItem>
+        </Select>
+
         <InputLabel id="demo-simple-select-label">*Group</InputLabel>
         <Select
           labelId="demo-simple-select-label"

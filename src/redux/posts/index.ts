@@ -19,7 +19,6 @@ export interface postState {
   UserPost: post[];
   isLoading: boolean;
   status: string | null;
-  tags: string[];
   allTags: string[];
   posts: post[];
   specificPost: post | null;
@@ -31,7 +30,6 @@ const initialState: postState = {
   UserPost: [],
   isLoading: false,
   status: null,
-  tags: [],
   allTags: [],
   posts: [],
   specificPost: null,
@@ -269,9 +267,7 @@ export const postSlice = createSlice({
   name: 'postSlice',
   initialState,
   reducers: {
-    saveTags: (state, action) => {
-      state.tags.push(action.payload);
-    },
+
   },
   extraReducers: (builder) => {
     builder.addCase(addpost.pending, (state, action) => {
@@ -374,9 +370,5 @@ export const postSlice = createSlice({
   },
 });
 
-export const { saveTags } = postSlice.actions;
 
 export default postSlice.reducer;
-function rejectWithValue(response: any) {
-  throw new Error('Function not implemented.');
-}
