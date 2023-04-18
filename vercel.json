@@ -6,5 +6,5 @@
       "use": "@vercel/node"
     }
   ],
-  "rewrites": [{ "source": "(.*)", "destination": "index.tsx" }]
+  "rewrites": [{ "source": "/client/src/", "destination": "index.tsx" }]
 }
