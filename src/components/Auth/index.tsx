@@ -17,7 +17,7 @@ export const Auth = () => {
   const dispatch = useAppDispatch();
 
   const { status } = useAppSelector((state: RootState) => state.auth);
-
+  console.log(import.meta.env.MODE)
   return (
     <div className="m-auto h-[100vh] flex justify-center items-center">
       <form
