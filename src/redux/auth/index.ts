@@ -3,6 +3,7 @@ import axios from 'axios';
 import { RootState } from '../store';
 import { useCookie } from '../../hooks/getToken';
 import type { user } from '../../types';
+import { instance } from '../../utils/axios';
 
 export interface authState {
   user: user | null;
@@ -22,15 +23,13 @@ const initialState: authState = {
   status: null,
 };
 
-export const registerUser = createAsyncThunk(
-  'authSlice/registerUser',
-  async ({ username, password }: userData) => {
-    const data = await axios
-      .post('http://localhost:5000/auth/registration', {
-        username,
-        password,
-      })
+export const googleAuth = createAsyncThunk(
+  'authSlice/googleAuth',
+  async (credential: any) => {
+    const data = await instance
+      .post('/auth/google', credential)
       .then((user) => {
+        console.log(user);
         document.cookie =
           encodeURIComponent('token') +
           '=' +
@@ -42,11 +41,30 @@ export const registerUser = createAsyncThunk(
   }
 );
 
+export const registerUser = createAsyncThunk(
+  'authSlice/registerUser',
+  async ({ username, password }: userData) => {
+    const data = await instance
+      .post('/auth/registration', {
+        username,
+        password,
+      })
+      .then((user) => {
+        document.cookie =
+          encodeURIComponent('token') +
+          '=' +
+          encodeURIComponent(user.data.token);
+        return user.data;
+      });
+    return data;
+  }
+);
+
 export const loginUser = createAsyncThunk(
   'authSlice/loginUser',
   async ({ username, password }: userData) => {
-    const data = await axios
-      .post('http://localhost:5000/auth/login', {
+    const data = await instance
+      .post('/auth/login', {
         username,
         password,
       })
@@ -63,9 +81,9 @@ export const loginUser = createAsyncThunk(
   }
 );
 
-export const getme = createAsyncThunk('authSlice/getme', async (state) => {
-  const data = await axios
-    .get('http://localhost:5000/auth/getme', {
+export const getme = createAsyncThunk('authSlice/getme', async () => {
+  const data = await instance
+    .get('/auth/getme', {
       headers: {
         Authorization: `Bearer ${useCookie('token')}`,
       },
@@ -87,7 +105,17 @@ export const authSlice = createSlice({
     },
   },
   extraReducers: (builder) => {
-    //register
+    builder.addCase(googleAuth.pending, (state, action) => {
+      state.isLoading = true;
+    });
+
+    builder.addCase(googleAuth.fulfilled, (state, action) => {
+      state.isLoading = false;
+      state.token = action.payload.token;
+      state.status = action.payload.message;
+      state.user = action.payload.user;
+    });
+
     builder.addCase(registerUser.pending, (state, action) => {
       state.isLoading = true;
     });
@@ -98,11 +126,7 @@ export const authSlice = createSlice({
       state.status = action.payload.message;
       state.user = action.payload.user;
     });
-    // builder.addCase(registerUser.rejected, (state, action) => {
-    //   state.status = action.payload.message;
-    // });
 
-    //login
     builder.addCase(loginUser.pending, (state, action) => {
       state.isLoading = true;
     });

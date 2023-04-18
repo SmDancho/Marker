@@ -4,6 +4,7 @@ import { useEffect } from 'react';
 import { RootState } from '../../redux/store';
 import { Auth } from '../../components/Auth';
 import { ProfileWidget } from '../../widgets/profileWidget';
+import { useParams } from 'react-router-dom';
 
 import type { user } from '../../types';
 

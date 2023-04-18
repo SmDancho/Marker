@@ -1,17 +1,51 @@
-import { Header } from './components/header';
+import { useState, useEffect } from 'react';
+
+import { Header } from './widgets/header';
 import { Profile } from './Pages/profile';
 import { MainPage } from './Pages/Main';
+import { PostPage } from './Pages/postPage';
+import { SearchedPostsPage } from './Pages/searchedPost';
 import { Routes, Route } from 'react-router-dom';
+import { UpdateForm } from './entities/updateForm';
+import { ThemeProvider, createTheme } from '@mui/material/styles';
+import CssBaseline from '@mui/material/CssBaseline';
+
 function App() {
+  const [mode, setMode] = useState<'light' | 'dark'>(
+    (localStorage.getItem('theme') as 'light' | 'dark') || 'dark'
+  );
+  const darkTheme = createTheme({
+    palette: {
+      mode: mode,
+    },
+  });
+  useEffect(() => {
+    const handleStorageChange = () => {
+      setMode(localStorage.getItem('theme') as 'light' | 'dark');
+    };
+
+    window.addEventListener('storageUpdated', () => handleStorageChange());
+
+    return () => {
+      window.removeEventListener('storageUpdated', () => handleStorageChange());
+    };
+  }, []);
+
   return (
     <>
-      <Header />
-      <div className="w-[1440px] m-auto h-[100px] ">
-        <Routes>
-          <Route path="/" element={<MainPage />} />
-          <Route path="/Profile" element={<Profile />} />
-        </Routes>
-      </div>
+      <ThemeProvider theme={darkTheme}>
+        <div className="w-[1440px] m-auto  ">
+          <CssBaseline />
+          <Header />
+          <Routes>
+            <Route path="/" element={<MainPage />} />
+            <Route path="/Profile" element={<Profile />} />
+            <Route path="/Post/:id" element={<PostPage />} />
+            <Route path="/Update/:id" element={<UpdateForm />} />
+            <Route path="/search" element={<SearchedPostsPage />} />
+          </Routes>
+        </div>
+      </ThemeProvider>
     </>
   );
 }

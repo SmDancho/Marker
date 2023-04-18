@@ -1,11 +1,14 @@
 import { useAppDispatch, useAppSelector } from '../../redux/store';
 import { useState } from 'react';
 import { RootState } from '../../redux/store';
-import { registerUser, loginUser, getme } from '../../redux/auth';
+
+import { registerUser, loginUser } from '../../redux/auth';
+
 import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
 import Alert from '@mui/material/Alert';
 
+import { GoogleAuth } from '../googleAuth';
 export const Auth = () => {
   const [register, setRegister] = useState(false);
   const [username, setUserName] = useState('');
@@ -22,7 +25,7 @@ export const Auth = () => {
         className="flex flex-col w-[550px] gap-4"
       >
         {status && <Alert severity="info">{status}</Alert>}
-
+        <GoogleAuth />
         <TextField
           id="outlined-basic"
           label="Username"
