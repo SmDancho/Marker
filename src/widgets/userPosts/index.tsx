@@ -22,12 +22,6 @@ export const UserPosts = () => {
 
   const [type, setType] = useState<string>('All');
 
-  const [likesSort, setLikesSort] = useState<'desc' | 'asc'>('desc');
-  const [raitingUserSort, setUserRaitingSort] = useState<'desc' | 'asc'>(
-    'desc'
-  );
-  const [avgRaiting, setAvgRaiting] = useState<'desc' | 'asc'>('desc');
-
   const [kindOfSort, setKindOfSort] = useState<
     'raiting' | 'userRaiting' | 'likes'
   >('likes');
@@ -37,18 +31,10 @@ export const UserPosts = () => {
   };
 
   const multiSort = (a: post, b: post) => {
-    const byLikes =
-      likesSort === 'desc'
-        ? b.likes.length - a.likes.length
-        : a.likes.length - b.likes.length;
-    const byUserRate =
-      raitingUserSort === 'desc'
-        ? b.authorRaiting - a.authorRaiting
-        : a.authorRaiting - b.authorRaiting;
+    const byLikes = b.likes.length - a.likes.length;
+    const byUserRate = b.authorRaiting - a.authorRaiting;
     const byAvgRating =
-      avgRaiting === 'desc'
-        ? useAvergeRaiting(b.raiting) - useAvergeRaiting(a.raiting)
-        : useAvergeRaiting(a.raiting) - useAvergeRaiting(b.raiting);
+      useAvergeRaiting(b.raiting) - useAvergeRaiting(a.raiting);
 
     if (kindOfSort === 'likes') {
       return byLikes;
@@ -84,16 +70,12 @@ export const UserPosts = () => {
                 className="flex"
                 onClick={() => {
                   setKindOfSort('raiting');
-                  setAvgRaiting(avgRaiting === 'desc' ? 'asc' : 'desc');
                 }}
               />
               <FormControlLabel
                 value="userRaiting"
                 onClick={() => {
                   setKindOfSort('userRaiting');
-                  setUserRaitingSort(
-                    raitingUserSort === 'desc' ? 'asc' : 'desc'
-                  );
                 }}
                 control={<Radio />}
                 label={translate.t('userRaiting')}
@@ -103,7 +85,6 @@ export const UserPosts = () => {
                 value="likes"
                 onClick={() => {
                   setKindOfSort('likes');
-                  setLikesSort(likesSort === 'desc' ? 'asc' : 'desc');
                 }}
                 label={translate.t('likes')}
               />
