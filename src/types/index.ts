@@ -28,4 +28,5 @@ export interface post {
   authorRaiting: number;
   likes: string[];
   comments: comment[];
+  group:string;
 }

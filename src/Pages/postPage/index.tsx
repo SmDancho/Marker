@@ -46,7 +46,6 @@ export const PostPage = () => {
   const handleComment = () => {
     dispatch(addComment({ _id: id as string, commentText }));
   };
-  console.log(specificPost?.tags)
   return (
     <section className="p-20 ">
       <div className="flex gap-10 flex-col">

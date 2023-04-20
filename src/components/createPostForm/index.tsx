@@ -1,5 +1,3 @@
-import { useState, useMemo, useEffect } from 'react';
-import { useDebounce } from '../../hooks/debonce';
 import TextField from '@mui/material/TextField';
 import Select from '@mui/material/Select';
 import MenuItem from '@mui/material/MenuItem';
@@ -7,32 +5,35 @@ import Autocomplete from '@mui/material/Autocomplete';
 import InputLabel from '@mui/material/InputLabel';
 import LoadingButton from '@mui/lab/LoadingButton';
 import Alert from '@mui/material/Alert';
-import Chip from '@mui/material/Chip';
 
 import { FileUploader } from 'react-drag-drop-files';
 import SimpleMDE from 'react-simplemde-editor';
-import 'easymde/dist/easymde.min.css';
 
 import { addpost, getTags } from '../../redux/posts';
+
 import { useAppDispatch, useAppSelector } from '../../redux/store';
-import type { RootState } from '../../redux/store';
+import { useState, useMemo, useEffect } from 'react';
+import { useDebounce } from '../../hooks/debonce';
+
+
+import 'easymde/dist/easymde.min.css';
 
 export const PostForm = () => {
   const [title, setTitle] = useState<string>('');
   const [topic, setTopic] = useState<string>('');
-  const [image, setImg] = useState<{ name: string }>();
+  const [image, setImg] = useState<File>();
   const [text, setText] = useState<string>('');
   const [group, setGroup] = useState<string>('');
 
   const [tagString, setTagsString] = useState<string>('');
   const [activeTags, setActiveTags] = useState<string[]>([]);
 
-  const [authorRaiting, setAuthorRaiting] = useState<unknown | null>(null);
+  const [authorRaiting, setAuthorRaiting] = useState<number>(0);
 
   const deboncedValue: string = useDebounce(tagString);
   const fileTypes = ['JPG', 'PNG', 'GIF'];
   const { isLoading, allTags, error } = useAppSelector(
-    (state: RootState) => state.userPosts
+    (state) => state.userPosts
   );
 
   const dispatch = useAppDispatch();
@@ -41,7 +42,7 @@ export const PostForm = () => {
     dispatch(getTags());
   }, []);
 
-  const hnadleSubmit = () => {
+  const handleSubmit = () => {
     dispatch(
       addpost({
         title,
@@ -50,14 +51,13 @@ export const PostForm = () => {
         text,
         group,
         tags: activeTags,
-        authorRaiting: authorRaiting as number,
+        authorRaiting: authorRaiting,
       })
     );
   };
 
   const tagsOption: string[] = [...allTags];
   tagsOption.push(deboncedValue);
-
 
   const textOptions = useMemo(() => {
     return {
@@ -70,6 +70,7 @@ export const PostForm = () => {
       },
     };
   }, []);
+
   return (
     <>
       {error === 'fill all required fields' && (
@@ -107,7 +108,7 @@ export const PostForm = () => {
           onChange={(_, newValue) => {
             setActiveTags(newValue);
           }}
-          onInputChange={(event, newInputValue) => {
+          onInputChange={(_, newInputValue) => {
             setTagsString(newInputValue);
           }}
           renderInput={(params) => (
@@ -125,7 +126,7 @@ export const PostForm = () => {
           className="w-[10%]"
           labelId="your-mark"
           value={authorRaiting}
-          onChange={(e) => setAuthorRaiting(e.target.value as unknown)}
+          onChange={(e) => setAuthorRaiting(e.target.value as number)}
         >
           <MenuItem value={1}>1</MenuItem>
           <MenuItem value={2}>2</MenuItem>
@@ -164,7 +165,7 @@ export const PostForm = () => {
               image.name
             ) : (
               <FileUploader
-                handleChange={(file: any) => setImg(file)}
+                handleChange={(file:File) => setImg(file)}
                 name="file"
                 types={fileTypes}
                 className="w-full"
@@ -176,7 +177,7 @@ export const PostForm = () => {
           loading={isLoading}
           variant="outlined"
           onClick={() => {
-            hnadleSubmit();
+            handleSubmit();
           }}
         >
           Create
