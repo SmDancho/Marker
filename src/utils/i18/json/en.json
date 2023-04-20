@@ -6,5 +6,8 @@
   "delete": "delete",
   "cancel": "cancel",
   "post": "post",
-  "update": "update"
+  "update": "update",
+  "userRaiting":"user raiting",
+  "avergeRaiting":"averge raiting",
+  "likes" : "likes"
 }
