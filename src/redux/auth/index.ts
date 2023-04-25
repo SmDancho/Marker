@@ -1,26 +1,31 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
-import axios from 'axios';
 import { RootState } from '../store';
 import { useCookie } from '../../hooks/getToken';
 import type { user } from '../../types';
 import { instance } from '../../utils/axios';
 
-export interface authState {
-  user: user | null;
-  token: null | string;
-  isLoading: boolean;
-  status: null | string;
-}
 interface userData {
   username: string;
   password: string;
 }
 
+export interface authState {
+  user: user | null;
+  viewUser: user | null;
+  token: null | string;
+  isLoading: boolean;
+  status: null | string;
+  allUsers: user[];
+}
+
 const initialState: authState = {
+  
   user: null,
+  viewUser: null,
   token: null,
   isLoading: false,
   status: null,
+  allUsers: [],
 };
 
 export const googleAuth = createAsyncThunk(
@@ -92,6 +97,25 @@ export const getme = createAsyncThunk('authSlice/getme', async () => {
   return data;
 });
 
+export const getUsers = createAsyncThunk('authSlice/getUsers', async () => {
+  const data = await instance
+    .get('/auth/users', {})
+    .then((response) => response.data);
+  return data;
+});
+export const getUserByID = createAsyncThunk(
+  'postSlice/getUserByID',
+  async (id: string) => {
+    const data = await instance
+      .post('/auth/getUserByid', { id })
+      .then((response) => {
+        return response.data;
+      });
+
+    return data;
+  }
+);
+
 export const authSlice = createSlice({
   name: 'authSlice',
   initialState,
@@ -105,6 +129,24 @@ export const authSlice = createSlice({
     },
   },
   extraReducers: (builder) => {
+    builder.addCase(getUserByID.pending, (state, action) => {
+      state.isLoading = true;
+    });
+
+    builder.addCase(getUserByID.fulfilled, (state, action) => {
+      state.isLoading = false;
+      state.status = action.payload.message;
+      state.viewUser = action.payload;
+    });
+    builder.addCase(getUsers.pending, (state, action) => {
+      state.isLoading = true;
+    });
+
+    builder.addCase(getUsers.fulfilled, (state, action) => {
+      state.isLoading = false;
+      state.allUsers = action.payload;
+    });
+
     builder.addCase(googleAuth.pending, (state, action) => {
       state.isLoading = true;
     });

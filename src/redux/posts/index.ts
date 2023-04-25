@@ -5,10 +5,11 @@ import { useCookie } from '../../hooks/getToken';
 import { instance } from '../../utils/axios';
 
 interface postData {
-  _id?: string;
+  postId?: string;
+  userId?: string;
   title: string;
   topic: string;
-  image?: any;
+  image?: File;
   text: string;
   group?: string;
   tags?: string[];
@@ -47,6 +48,7 @@ export const addpost = createAsyncThunk(
     group,
     tags,
     authorRaiting,
+    userId
   }: postData) => {
     const data = await axios
       .post(
@@ -59,6 +61,7 @@ export const addpost = createAsyncThunk(
           group,
           tags: tags,
           authorRaiting,
+          userId
         },
         {
           headers: {
@@ -91,14 +94,15 @@ export const search = createAsyncThunk(
 export const deletePost = createAsyncThunk(
   'postSlice/deletePost',
 
-  async (_id: string) => {
+  async ({ postId, userId }: { postId: string; userId: string }) => {
     const data = await instance
       .delete('/post/delete', {
         headers: {
           Authorization: `Bearer ${useCookie('token')}`,
         },
         data: {
-          _id,
+          postId,
+          userId,
         },
       })
       .then((response) => {
@@ -112,12 +116,12 @@ export const deletePost = createAsyncThunk(
 export const updatePost = createAsyncThunk(
   'postSlice/updatePost',
 
-  async ({ _id, text, title, topic, authorRaiting }: postData) => {
+  async ({ postId, text, title, topic, authorRaiting }: postData) => {
     const data = await instance
       .post(
         '/post/update',
         {
-          postID: _id,
+          postId,
           text,
           title,
           topic,
@@ -139,11 +143,14 @@ export const updatePost = createAsyncThunk(
 
 export const getUserPosts = createAsyncThunk(
   'postSlice/getUserPosts',
-  async () => {
+  async (id: string) => {
     const data = await instance
       .get('/post/getUsersPosts', {
         headers: {
           Authorization: `Bearer ${useCookie('token')}`,
+        },
+        params: {
+          id,
         },
       })
       .then((response) => {
@@ -157,11 +164,9 @@ export const getUserPosts = createAsyncThunk(
 export const getAllPosts = createAsyncThunk(
   'postSlice/getAllPosts',
   async () => {
-    const data = await instance
-      .get('/post/allPosts')
-      .then((response) => {
-        return response.data;
-      });
+    const data = await instance.get('/post/allPosts').then((response) => {
+      return response.data;
+    });
 
     return data;
   }
@@ -230,11 +235,9 @@ export const addComment = createAsyncThunk(
   }
 );
 export const getTags = createAsyncThunk('postSlice/getTags', async () => {
-  const data = await instance
-    .get('/post/getTags')
-    .then((response) => {
-      return response.data;
-    });
+  const data = await instance.get('/post/getTags').then((response) => {
+    return response.data;
+  });
 
   return data;
 });
@@ -266,9 +269,7 @@ export const addRaiting = createAsyncThunk(
 export const postSlice = createSlice({
   name: 'postSlice',
   initialState,
-  reducers: {
-
-  },
+  reducers: {},
   extraReducers: (builder) => {
     builder.addCase(addpost.pending, (state, action) => {
       state.isLoading = true;
@@ -279,7 +280,7 @@ export const postSlice = createSlice({
       state.status = action.payload.message;
       state.error = action.payload.message;
     });
-    builder.addCase(search.pending, (state, action) => {
+    builder.addCase(search.pending, (state) => {
       state.isLoading = true;
     });
 
@@ -289,7 +290,7 @@ export const postSlice = createSlice({
       state.searchedPosts = action.payload;
     });
 
-    builder.addCase(getUserPosts.pending, (state, action) => {
+    builder.addCase(getUserPosts.pending, (state) => {
       state.isLoading = true;
     });
 
@@ -369,6 +370,5 @@ export const postSlice = createSlice({
     });
   },
 });
-
 
 export default postSlice.reducer;

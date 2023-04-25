@@ -3,7 +3,8 @@ export interface user {
   username: string;
   password: string;
   token: string;
-  posts?: Array<string>;
+  posts?: string[];
+  roles: string[];
 }
 export interface comment {
   _id: string;
@@ -28,5 +29,5 @@ export interface post {
   authorRaiting: number;
   likes: string[];
   comments: comment[];
-  group:string;
+  group: string;
 }

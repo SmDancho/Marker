@@ -5,6 +5,7 @@ import { Profile } from './Pages/profile';
 import { MainPage } from './Pages/Main';
 import { PostPage } from './Pages/postPage';
 import { SearchedPostsPage } from './Pages/searchedPost';
+import { UserPage } from './Pages/userPage';
 import { Routes, Route } from 'react-router-dom';
 import { UpdateForm } from './components/updateForm';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
@@ -43,6 +44,8 @@ function App() {
             <Route path="/Post/:id" element={<PostPage />} />
             <Route path="/Update/:id" element={<UpdateForm />} />
             <Route path="/search" element={<SearchedPostsPage />} />
+            <Route path="/search" element={<SearchedPostsPage />} />
+            <Route path="/user/:id" element={<UserPage />} />
           </Routes>
         </div>
       </ThemeProvider>
