@@ -33,7 +33,7 @@ const ProfileWidget: FC<props> = ({
 }) => {
   const [isOpenForm, setIsOpenForm] = useState(false);
 
-  const { user, allUsers } = useAppSelector((state) => state.auth);
+  const { user, allUsers, viewUser } = useAppSelector((state) => state.auth);
   const { UserPost, status } = useAppSelector((state) => state.userPosts);
 
   const { t } = useTranslation();
@@ -49,7 +49,7 @@ const ProfileWidget: FC<props> = ({
     dispatch(getUserPosts(_id as string));
 
     dispatch(getUsers());
-  }, [status, user?._id]);
+  }, [status , _id]);
 
   const userLieks = useMemo(
     () => UserPost?.map((post) => post.likes),

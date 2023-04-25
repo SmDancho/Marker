@@ -1,4 +1,4 @@
-import {MemoizedProfileWidget} from '../../widgets/profileWidget';
+import { MemoizedProfileWidget } from '../../widgets/profileWidget';
 import { useParams } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '../../redux/store';
 import { useEffect } from 'react';
@@ -7,7 +7,7 @@ import type { user } from '../../types';
 import { useAdmin } from '../../hooks/isAdmin';
 import { getUserByID, getme } from '../../redux/auth';
 
- const UserPage = () => {
+const UserPage = () => {
   const { id } = useParams();
   const dispatch = useAppDispatch();
 
@@ -24,4 +24,4 @@ import { getUserByID, getme } from '../../redux/auth';
     <div>acces denied</div>
   );
 };
-export default UserPage
+export default UserPage;
