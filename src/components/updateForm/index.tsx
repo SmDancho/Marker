@@ -21,7 +21,6 @@ export const UpdateForm = () => {
     specificPost?.authorRaiting as number
   );
 
-
   const { id } = useParams();
   const textOptions = useMemo(() => {
     return {
@@ -37,18 +36,13 @@ export const UpdateForm = () => {
 
   useEffect(() => {
     dispatch(getPostById(id as string));
-
-    
   }, []);
 
   console.log(status);
   return (
     <>
       {status && (
-        <Alert
-          variant="outlined"
-          severity="info"
-        >
+        <Alert variant="outlined" severity="info">
           {status}
         </Alert>
       )}
@@ -99,7 +93,7 @@ export const UpdateForm = () => {
             onClick={() => {
               dispatch(
                 updatePost({
-                  _id: id as string,
+                  postId: id as string,
                   text: updatedText as string,
                   title: updatedTitle as string,
                   topic: updatedTopic as string,
