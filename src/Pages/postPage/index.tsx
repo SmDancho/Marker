@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useState, memo } from 'react';
 import { useParams } from 'react-router-dom';
 import ReactMarkdown from 'react-markdown';
 
@@ -27,6 +27,7 @@ export const PostPage = () => {
   const { id } = useParams();
 
   const [commentText, setCommentText] = useState<string>('');
+
   const dispatch = useAppDispatch();
 
   const avergeRaiting = useAvergeRaiting(specificPost?.raiting);
@@ -43,9 +44,14 @@ export const PostPage = () => {
   const handleLike = () => {
     dispatch(likePost(id as string));
   };
+
   const handleComment = () => {
     dispatch(addComment({ _id: id as string, commentText }));
   };
+  const handleRaiting = (newValue: number | null) => {
+    dispatch(addRaiting({ _id: id as string, value: newValue as number }));
+  };
+
   return (
     <section className="p-20 ">
       <div className="flex gap-10 flex-col">
@@ -55,9 +61,7 @@ export const PostPage = () => {
             name="simple-controlled"
             value={avergeRaiting}
             onChange={(event, newValue) => {
-              dispatch(
-                addRaiting({ _id: id as string, value: newValue as number })
-              );
+              handleRaiting(newValue);
             }}
           />
         </div>

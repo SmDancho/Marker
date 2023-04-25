@@ -15,7 +15,6 @@ import { useAppDispatch, useAppSelector } from '../../redux/store';
 import { useState, useMemo, useEffect } from 'react';
 import { useDebounce } from '../../hooks/debonce';
 
-
 import 'easymde/dist/easymde.min.css';
 
 export const PostForm = () => {
@@ -36,6 +35,8 @@ export const PostForm = () => {
     (state) => state.userPosts
   );
 
+  const { user, viewUser } = useAppSelector((state) => state.auth);
+
   const dispatch = useAppDispatch();
 
   useEffect(() => {
@@ -52,6 +53,7 @@ export const PostForm = () => {
         group,
         tags: activeTags,
         authorRaiting: authorRaiting,
+        userId: viewUser?._id || user?._id,
       })
     );
   };
@@ -165,7 +167,7 @@ export const PostForm = () => {
               image.name
             ) : (
               <FileUploader
-                handleChange={(file:File) => setImg(file)}
+                handleChange={(file: File) => setImg(file)}
                 name="file"
                 types={fileTypes}
                 className="w-full"

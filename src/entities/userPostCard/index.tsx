@@ -9,7 +9,7 @@ import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import Paper from '@mui/material/Paper';
 
-import { useAppDispatch } from '../../redux/store';
+import { useAppDispatch, useAppSelector } from '../../redux/store';
 import { deletePost } from '../../redux/posts';
 
 import { useTranslation } from 'react-i18next';
@@ -17,7 +17,7 @@ import translate from '../../utils/i18/i18n';
 
 export const UserPostCard: FC<post> = ({ title, image, _id, text }) => {
   const [confirm, setConfirm] = useState(false);
-
+  const { viewUser, user } = useAppSelector((state) => state.auth);
   const { t } = useTranslation();
   const dispatch = useAppDispatch();
   return (
@@ -41,7 +41,12 @@ export const UserPostCard: FC<post> = ({ title, image, _id, text }) => {
             color="error"
             onClick={() => {
               setConfirm(false);
-              dispatch(deletePost(_id));
+              dispatch(
+                deletePost({
+                  postId: _id,
+                  userId: (viewUser?._id as string) || (user?._id as string),
+                })
+              );
             }}
           >
             {translate.t('delete')}
