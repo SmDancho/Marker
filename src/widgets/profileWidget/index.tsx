@@ -33,7 +33,7 @@ export const ProfileWidget: FC<props> = ({
 }) => {
   const [isOpenForm, setisOpenForm] = useState(false);
   const { status } = useAppSelector((state) => state.userPosts);
-  const { user, allUsers } = useAppSelector((state) => state.auth);
+  const { user, allUsers, viewUser } = useAppSelector((state) => state.auth);
   const { UserPost } = useAppSelector((state) => state.userPosts);
 
   const { t } = useTranslation();
@@ -50,10 +50,10 @@ export const ProfileWidget: FC<props> = ({
     dispatch(getUserPosts(_id as string));
 
     dispatch(getUsers());
-  }, [status, user?._id]);
+  }, [status, viewUser]);
 
   const userLieks = UserPost?.map((post) => post.likes);
-  
+
   return (
     <div>
       <div className="flex justify-between mt-5 items-center">
