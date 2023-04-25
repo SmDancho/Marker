@@ -93,7 +93,7 @@ export const UserPosts = () => {
         </div>
       </div>
       {sortedItems.map((item) => (
-        <UserPostCard {...item} />
+        <UserPostCard {...item} key={item._id} />
       ))}
     </div>
   );

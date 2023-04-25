@@ -31,10 +31,10 @@ export const Header = () => {
   }, []);
 
   return (
-    <header>
-      <div className="w-[1440px] m-auto">
+    <header >
+      <div className="max-w-[1440px] m-auto">
         <AppBar position="static">
-          <Toolbar className="flex justify-between">
+          <Toolbar className="flex justify-between p-3">
             <div>
               <MenuComponent />
               <IconButton onClick={handleThemeChange} color="inherit">
@@ -48,13 +48,7 @@ export const Header = () => {
             </div>
 
             <Link to={'/Profile'}>
-              <IconButton
-                size="large"
-                aria-label="account of current user"
-                aria-controls="menu-appbar"
-                aria-haspopup="true"
-                color="inherit"
-              >
+              <IconButton size="large" color="inherit">
                 <AccountCircle />
               </IconButton>
             </Link>

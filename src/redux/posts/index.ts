@@ -179,12 +179,7 @@ export const getPostById = createAsyncThunk(
         postID: _id,
       })
       .then((response) => {
-        getPostById(_id);
         return response.data;
-      })
-      .catch((error) => {
-        console.log(error);
-        getPostById(_id);
       });
 
     return data;

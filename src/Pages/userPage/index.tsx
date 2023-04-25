@@ -1,4 +1,4 @@
-import { ProfileWidget } from '../../widgets/profileWidget';
+import {MemoizedProfileWidget} from '../../widgets/profileWidget';
 import { useParams } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '../../redux/store';
 import { useEffect } from 'react';
@@ -7,20 +7,21 @@ import type { user } from '../../types';
 import { useAdmin } from '../../hooks/isAdmin';
 import { getUserByID, getme } from '../../redux/auth';
 
-export const UserPage = () => {
+ const UserPage = () => {
   const { id } = useParams();
   const dispatch = useAppDispatch();
 
   const { user, viewUser } = useAppSelector((state) => state.auth);
   const isAdmin = useAdmin(user as user);
-  console.log(viewUser);
+
   useEffect(() => {
     dispatch(getUserByID(id as string));
     dispatch(getme());
   }, []);
   return isAdmin ? (
-    <ProfileWidget {...(viewUser as user)} createBtnVisible={false} />
+    <MemoizedProfileWidget {...(viewUser as user)} createBtnVisible={false} />
   ) : (
     <div>acces denied</div>
   );
 };
+export default UserPage

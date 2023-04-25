@@ -9,7 +9,7 @@ import TextField from '@mui/material/TextField';
 import SimpleMDE from 'react-simplemde-editor';
 import { useParams } from 'react-router-dom';
 
-export const UpdateForm = () => {
+ const UpdateForm = () => {
   const { specificPost, status, isLoading } = useAppSelector(
     (state) => state.userPosts
   );
@@ -109,3 +109,4 @@ export const UpdateForm = () => {
     </>
   );
 };
+export default UpdateForm

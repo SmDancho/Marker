@@ -21,7 +21,7 @@ import SendIcon from '@mui/icons-material/Send';
 import Button from '@mui/material/Button';
 
 import { useAvergeRaiting } from '../../hooks/avergeRaiting';
-export const PostPage = () => {
+const PostPage = () => {
   const { specificPost, status } = useAppSelector((state) => state.userPosts);
   const { user } = useAppSelector((state) => state.auth);
   const { id } = useParams();
@@ -39,7 +39,7 @@ export const PostPage = () => {
   useEffect(() => {
     dispatch(getPostById(id as string));
     dispatch(getme());
-  }, [status, dispatch]);
+  }, [status]);
 
   const handleLike = () => {
     dispatch(likePost(id as string));
@@ -143,3 +143,4 @@ export const PostPage = () => {
     </section>
   );
 };
+export default PostPage;

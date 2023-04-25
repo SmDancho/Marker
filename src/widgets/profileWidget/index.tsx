@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo, memo } from 'react';
 import { FC } from 'react';
 import Button from '@mui/material/Button';
 import Avatar from '@mui/material/Avatar';
@@ -25,34 +25,36 @@ interface props {
   paramsId?: string | undefined;
 }
 
-export const ProfileWidget: FC<props> = ({
+const ProfileWidget: FC<props> = ({
   username,
   createBtnVisible,
   isAdmin,
   _id,
 }) => {
-  const [isOpenForm, setisOpenForm] = useState(false);
-  const { status } = useAppSelector((state) => state.userPosts);
-  const { user, allUsers, viewUser } = useAppSelector((state) => state.auth);
-  const { UserPost } = useAppSelector((state) => state.userPosts);
+  const [isOpenForm, setIsOpenForm] = useState(false);
+
+  const { user, allUsers } = useAppSelector((state) => state.auth);
+  const { UserPost, status } = useAppSelector((state) => state.userPosts);
 
   const { t } = useTranslation();
   const dispatch = useAppDispatch();
 
   const handelOpenForm = () => {
-    setisOpenForm((prev) => !prev);
+    setIsOpenForm((prev) => !prev);
   };
 
   useEffect(() => {
-    if (status === 'Created successfully') {
-      setisOpenForm(false);
-    }
+    status === 'Created successfully' && setIsOpenForm(false);
+
     dispatch(getUserPosts(_id as string));
 
     dispatch(getUsers());
-  }, [status, viewUser]);
+  }, [status, user?._id]);
 
-  const userLieks = UserPost?.map((post) => post.likes);
+  const userLieks = useMemo(
+    () => UserPost?.map((post) => post.likes),
+    [UserPost]
+  );
 
   return (
     <div>
@@ -107,3 +109,5 @@ export const ProfileWidget: FC<props> = ({
     </div>
   );
 };
+
+export const MemoizedProfileWidget = memo(ProfileWidget);
