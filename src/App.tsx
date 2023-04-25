@@ -1,15 +1,18 @@
-import { useState, useEffect } from 'react';
-
-import { Header } from './widgets/header';
-import { Profile } from './Pages/profile';
-import { MainPage } from './Pages/Main';
-import { PostPage } from './Pages/postPage';
-import { SearchedPostsPage } from './Pages/searchedPost';
-import { UserPage } from './Pages/userPage';
+import { useState, useEffect, lazy, Suspense } from 'react';
 import { Routes, Route } from 'react-router-dom';
-import { UpdateForm } from './components/updateForm';
+import CircularProgress from '@mui/material/CircularProgress';
+
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
+
+import { Header } from './widgets/header';
+import { MainPage } from './Pages/Main';
+
+const ProfilePage = lazy(() => import('./Pages/profile'));
+const PostPage = lazy(() => import('./Pages/postPage'));
+const SearchedPostsPage = lazy(() => import('./Pages/searchedPost'));
+const UserPage = lazy(() => import('./Pages/userPage'));
+const UpdateForm = lazy(() => import('./components/updateForm'));
 
 function App() {
   const [mode, setMode] = useState<'light' | 'dark'>(
@@ -35,18 +38,26 @@ function App() {
   return (
     <>
       <ThemeProvider theme={darkTheme}>
-        <div className="w-[1440px] m-auto  ">
+        <div className="max-w-[1440px] m-auto  ">
           <CssBaseline />
           <Header />
-          <Routes>
-            <Route path="/" element={<MainPage />} />
-            <Route path="/Profile" element={<Profile />} />
-            <Route path="/Post/:id" element={<PostPage />} />
-            <Route path="/Update/:id" element={<UpdateForm />} />
-            <Route path="/search" element={<SearchedPostsPage />} />
-            <Route path="/search" element={<SearchedPostsPage />} />
-            <Route path="/user/:id" element={<UserPage />} />
-          </Routes>
+          <Suspense
+            fallback={
+                <div className="flex w-full h-[100vh] justify-center items-center" >
+                  <CircularProgress />
+                </div>
+            }
+          >
+            <Routes>
+              <Route path="/" element={<MainPage />} />
+              <Route path="/Profile" element={<ProfilePage />} />
+              <Route path="/Post/:id" element={<PostPage />} />
+              <Route path="/Update/:id" element={<UpdateForm />} />
+              <Route path="/search" element={<SearchedPostsPage />} />
+              <Route path="/search" element={<SearchedPostsPage />} />
+              <Route path="/user/:id" element={<UserPage />} />
+            </Routes>
+          </Suspense>
         </div>
       </ThemeProvider>
     </>

@@ -9,7 +9,6 @@ export const MainPage = () => {
   const dispatch = useAppDispatch();
   const { posts } = useAppSelector((state: RootState) => state.userPosts);
   const { user } = useAppSelector((state: RootState) => state.auth);
-  console.log(user);
   useEffect(() => {
     dispatch(getAllPosts());
   }, []);
