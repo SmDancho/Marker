@@ -13,7 +13,7 @@ export const UserPage = () => {
 
   const { user, viewUser } = useAppSelector((state) => state.auth);
   const isAdmin = useAdmin(user as user);
-  console.log(isAdmin);
+  console.log(viewUser);
   useEffect(() => {
     dispatch(getUserByID(id as string));
     dispatch(getme());

@@ -48,7 +48,7 @@ export const addpost = createAsyncThunk(
     group,
     tags,
     authorRaiting,
-    userId
+    userId,
   }: postData) => {
     const data = await axios
       .post(
@@ -61,7 +61,7 @@ export const addpost = createAsyncThunk(
           group,
           tags: tags,
           authorRaiting,
-          userId
+          userId,
         },
         {
           headers: {
@@ -179,7 +179,12 @@ export const getPostById = createAsyncThunk(
         postID: _id,
       })
       .then((response) => {
+        getPostById(_id);
         return response.data;
+      })
+      .catch((error) => {
+        console.log(error);
+        getPostById(_id);
       });
 
     return data;

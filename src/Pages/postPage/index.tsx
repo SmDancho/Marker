@@ -39,7 +39,7 @@ export const PostPage = () => {
   useEffect(() => {
     dispatch(getPostById(id as string));
     dispatch(getme());
-  }, [status]);
+  }, [status, dispatch]);
 
   const handleLike = () => {
     dispatch(likePost(id as string));
