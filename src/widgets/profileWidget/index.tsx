@@ -1,4 +1,4 @@
-import { useState, useEffect, useMemo, memo } from 'react';
+import { useState, useEffect, useMemo, memo, lazy } from 'react';
 import { FC } from 'react';
 import Button from '@mui/material/Button';
 import Avatar from '@mui/material/Avatar';
@@ -10,12 +10,13 @@ import { useAppDispatch, useAppSelector } from '../../redux/store';
 import { logout, getUsers } from '../../redux/auth';
 import { getUserPosts } from '../../redux/posts';
 
-import { PostForm } from '../../components/createPostForm';
 import { AllUsers } from '../../entities/allUsersCard';
 
 import { UserPosts } from '../userPosts';
 
 import translate from '../../utils/i18/i18n';
+
+const PostForm = lazy(() => import('../../components/createPostForm'));
 
 interface props {
   username: string;
@@ -25,89 +26,80 @@ interface props {
   paramsId?: string | undefined;
 }
 
-const ProfileWidget: FC<props> = ({
-  username,
-  createBtnVisible,
-  isAdmin,
-  _id,
-}) => {
-  const [isOpenForm, setIsOpenForm] = useState(false);
+export const ProfileWidget: FC<props> = memo(
+  ({ username, createBtnVisible, isAdmin, _id }) => {
+    const dispatch = useAppDispatch();
+    const { t } = useTranslation();
 
-  const { user, allUsers, viewUser } = useAppSelector((state) => state.auth);
-  const { UserPost, status } = useAppSelector((state) => state.userPosts);
+    const [isOpenForm, setIsOpenForm] = useState(false);
 
-  const { t } = useTranslation();
-  const dispatch = useAppDispatch();
+    const { allUsers } = useAppSelector((state) => state.auth);
+    const { UserPost, status } = useAppSelector((state) => state.userPosts);
 
-  const handelOpenForm = () => {
-    setIsOpenForm((prev) => !prev);
-  };
+    const handelOpenForm = () => {
+      setIsOpenForm((prev) => !prev);
+    };
 
-  useEffect(() => {
-    status === 'Created successfully' && setIsOpenForm(false);
+    useEffect(() => {
+      status === 'Created successfully' && setIsOpenForm(false);
 
-    dispatch(getUserPosts(_id as string));
+      dispatch(getUserPosts(_id as string));
+      dispatch(getUsers());
+    }, [status, _id]);
 
-    dispatch(getUsers());
-  }, [status , _id]);
+    const userLikes = UserPost?.map((post) => post.likes);
 
-  const userLieks = useMemo(
-    () => UserPost?.map((post) => post.likes),
-    [UserPost]
-  );
+    return (
+      <div>
+        <div className="flex justify-between mt-5 items-center">
+          <div className="flex items-center gap-2">
+            <Avatar alt={`${username}`} src="/static/images/avatar/1.jpg" />
+            <div>
+              <div className="flex">
+                <div className="font-bold">{username}</div>
+                {isAdmin && <AdminPanelSettingsIcon />}
+              </div>
 
-  return (
-    <div>
-      <div className="flex justify-between mt-5 items-center">
-        <div className="flex items-center gap-2">
-          <Avatar alt={`${username}`} src="/static/images/avatar/1.jpg" />
-          <div>
-            <div className="flex">
-              <div className="font-bold">{username}</div>
-              {isAdmin && <AdminPanelSettingsIcon />}
+              <div>likes {userLikes[0]?.length}</div>
             </div>
-
-            <div>likes {userLieks[0]?.length}</div>
+          </div>
+          <div>
+            {createBtnVisible && (
+              <Button
+                variant="outlined"
+                onClick={() => {
+                  dispatch(logout());
+                }}
+              >
+                {translate.t('logOut')}
+              </Button>
+            )}
           </div>
         </div>
-        <div>
-          {createBtnVisible && (
+        <section className="mt-5">
+          <div>
             <Button
               variant="outlined"
               onClick={() => {
-                dispatch(logout());
+                handelOpenForm();
               }}
             >
-              {translate.t('logOut')}
+              {isOpenForm ? translate.t('close') : translate.t('createReview')}
             </Button>
-          )}
-        </div>
+          </div>
+        </section>
+
+        <section className="flex gap-5 flex-wrap m-auto">
+          {isOpenForm ? <PostForm /> : <UserPosts />}
+        </section>
+
+        <section className="mt-5">
+          {isAdmin &&
+            allUsers
+              ?.filter((users) => users.username !== username)
+              .map((user) => <AllUsers {...user} key={user._id} />)}
+        </section>
       </div>
-      <section className="mt-5">
-        <div>
-          <Button
-            variant="outlined"
-            onClick={() => {
-              handelOpenForm();
-            }}
-          >
-            {isOpenForm ? translate.t('close') : translate.t('createReview')}
-          </Button>
-        </div>
-      </section>
-
-      <section className="flex gap-5 flex-wrap m-auto">
-        {isOpenForm ? <PostForm /> : <UserPosts />}
-      </section>
-
-      <section className="mt-5">
-        {isAdmin &&
-          allUsers
-            ?.filter((users) => users.username !== user?.username)
-            .map((user) => <AllUsers {...user} />)}
-      </section>
-    </div>
-  );
-};
-
-export const MemoizedProfileWidget = memo(ProfileWidget);
+    );
+  }
+);

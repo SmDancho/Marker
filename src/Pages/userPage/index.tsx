@@ -1,4 +1,4 @@
-import { MemoizedProfileWidget } from '../../widgets/profileWidget';
+import { ProfileWidget } from '../../widgets/profileWidget';
 import { useParams } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '../../redux/store';
 import { useEffect } from 'react';
@@ -19,7 +19,7 @@ const UserPage = () => {
     dispatch(getme());
   }, []);
   return isAdmin ? (
-    <MemoizedProfileWidget {...(viewUser as user)} createBtnVisible={false} />
+    <ProfileWidget {...(viewUser as user)} createBtnVisible={false} />
   ) : (
     <div>acces denied</div>
   );
