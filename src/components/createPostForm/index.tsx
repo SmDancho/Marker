@@ -17,7 +17,7 @@ import { useDebounce } from '../../hooks/debonce';
 
 import 'easymde/dist/easymde.min.css';
 
-export const PostForm = () => {
+const PostForm = () => {
   const [title, setTitle] = useState<string>('');
   const [topic, setTopic] = useState<string>('');
   const [image, setImg] = useState<File>();
@@ -188,3 +188,4 @@ export const PostForm = () => {
     </>
   );
 };
+export default PostForm;
