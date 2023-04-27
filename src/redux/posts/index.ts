@@ -25,6 +25,8 @@ export interface postState {
   specificPost: post | null;
   searchedPosts: post[];
   error: string | null;
+  filter: string;
+  typeFilter: string;
 }
 
 const initialState: postState = {
@@ -36,6 +38,8 @@ const initialState: postState = {
   specificPost: null,
   error: null,
   searchedPosts: [],
+  filter: '',
+  typeFilter: '',
 };
 
 export const addpost = createAsyncThunk(
@@ -269,7 +273,14 @@ export const addRaiting = createAsyncThunk(
 export const postSlice = createSlice({
   name: 'postSlice',
   initialState,
-  reducers: {},
+  reducers: {
+    activeFilter: (state, action) => {
+      state.filter = action.payload;
+    },
+    activeFilterByType: (state, action) => {
+      state.typeFilter = action.payload;
+    },
+  },
   extraReducers: (builder) => {
     builder.addCase(addpost.pending, (state, action) => {
       state.isLoading = true;
@@ -371,4 +382,5 @@ export const postSlice = createSlice({
   },
 });
 
+export const { activeFilter ,activeFilterByType} = postSlice.actions;
 export default postSlice.reducer;

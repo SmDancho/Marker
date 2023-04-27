@@ -6,6 +6,8 @@ import type { RootState } from '../../redux/store';
 
 import { PostCard } from '../../entities/postCard';
 export const MainPage = () => {
+
+
   const dispatch = useAppDispatch();
   const { posts } = useAppSelector((state: RootState) => state.userPosts);
   const { user } = useAppSelector((state: RootState) => state.auth);

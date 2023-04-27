@@ -32,7 +32,7 @@ export const Header = () => {
 
   return (
     <header >
-      <div className="max-w-[1440px] m-auto">
+      <div className="max-w-[1488px] m-auto">
         <AppBar position="static">
           <Toolbar className="flex justify-between p-3">
             <div>

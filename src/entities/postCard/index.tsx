@@ -36,7 +36,7 @@ export const PostCard: FC<props> = ({
         </div>
         <div className="px-5 flex flex-col justify-between gap-2 max-w-[500px] w-[500px]">
           <div className="flex justify-between items-center w-full">
-            <div className="font-bold  text-3xl">{title}</div>
+            <div className="font-bold  text-[1.8rem]">{title}</div>
             <Rating name="simple-controlled" value={avergeRaiting} readOnly />
           </div>
 

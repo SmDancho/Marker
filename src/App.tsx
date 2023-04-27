@@ -4,6 +4,7 @@ import CircularProgress from '@mui/material/CircularProgress';
 
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
+import Container from '@mui/material/Container';
 
 import { Header } from './widgets/header';
 import { MainPage } from './Pages/Main';
@@ -38,7 +39,7 @@ function App() {
   return (
     <>
       <ThemeProvider theme={darkTheme}>
-        <div className="max-w-[1440px] m-auto  ">
+        <Container maxWidth='xl'>
           <CssBaseline />
           <Header />
           <Suspense
@@ -58,7 +59,7 @@ function App() {
               <Route path="/user/:id" element={<UserPage />} />
             </Routes>
           </Suspense>
-        </div>
+        </Container>
       </ThemeProvider>
     </>
   );

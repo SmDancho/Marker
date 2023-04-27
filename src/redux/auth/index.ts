@@ -19,7 +19,6 @@ export interface authState {
 }
 
 const initialState: authState = {
-  
   user: null,
   viewUser: null,
   token: null,
@@ -34,14 +33,31 @@ export const googleAuth = createAsyncThunk(
     const data = await instance
       .post('/auth/google', credential)
       .then((user) => {
-        console.log(user);
         document.cookie =
           encodeURIComponent('token') +
           '=' +
           encodeURIComponent(user.data.token);
         return user.data;
       });
-    console.log(data);
+
+    return data;
+  }
+);
+
+export const twitchAuth = createAsyncThunk(
+  'authSlice/twitchAuth',
+  async (userData: {
+    client_id: string;
+    expires_in: number;
+    login: string;
+    scopes: string[];
+    user_id: string;
+  }) => {
+    const data = await instance.post('/auth/twitch', userData).then((user) => {
+      document.cookie =
+        encodeURIComponent('token') + '=' + encodeURIComponent(user.data.token);
+      return user.data;
+    });
     return data;
   }
 );
@@ -129,6 +145,19 @@ export const authSlice = createSlice({
     },
   },
   extraReducers: (builder) => {
+    builder.addCase(twitchAuth.rejected, (state, action) => {
+      state.isLoading = false;
+    });
+    builder.addCase(twitchAuth.pending, (state, action) => {
+      state.isLoading = true;
+    });
+
+    builder.addCase(twitchAuth.fulfilled, (state, action) => {
+      state.isLoading = false;
+      state.token = action.payload.token;
+      state.status = action.payload.message;
+      state.user = action.payload.user;
+    });
     builder.addCase(getUserByID.pending, (state, action) => {
       state.isLoading = true;
     });
@@ -179,6 +208,9 @@ export const authSlice = createSlice({
       state.token = action.payload.token;
       state.status = action.payload.message;
       state.user = action.payload.user;
+    });
+    builder.addCase(getme.rejected, (state, action) => {
+      state.isLoading = false;
     });
     builder.addCase(getme.pending, (state, action) => {
       state.isLoading = true;
