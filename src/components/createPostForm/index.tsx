@@ -116,16 +116,16 @@ const PostForm = () => {
           renderInput={(params) => (
             <TextField
               {...params}
-              variant="filled"
-              label="freeSolo"
+              variant="outlined"
+              label="Tags"
               placeholder="Favorites"
             />
           )}
         />
 
         <InputLabel id="your-mark">*your mark (from 1 to 10)</InputLabel>
+
         <Select
-          className="w-[10%]"
           labelId="your-mark"
           value={authorRaiting}
           onChange={(e) => setAuthorRaiting(e.target.value as number)}
@@ -162,18 +162,16 @@ const PostForm = () => {
         />
 
         <div className="flex gap-5 ">
-          <p className="flex items-center ">
-            {image ? (
-              image.name
-            ) : (
-              <FileUploader
-                handleChange={(file: File) => setImg(file)}
-                name="file"
-                types={fileTypes}
-                className="w-full"
-              />
-            )}
-          </p>
+          {image ? (
+            <p className="flex items-center ">{image.name}</p>
+          ) : (
+            <FileUploader
+              handleChange={(file: File) => setImg(file)}
+              name="file"
+              types={fileTypes}
+              
+            />
+          )}
         </div>
         <LoadingButton
           loading={isLoading}

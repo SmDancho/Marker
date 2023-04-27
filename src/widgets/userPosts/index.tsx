@@ -39,8 +39,8 @@ export const UserPosts = () => {
   }, [kindOfSort, type]);
   return (
     <div className="flex flex-col w-full ">
-      <div className=" flex justify-between items-center mt-10">
-        <div>
+      <div className=" flex flex-col justify-between items-start mt-10 md:flex-row md:items-center">
+        <div className="flex justify-start">
           <Select value={type} onChange={handleChange}>
             <MenuItem value={'All'}>All</MenuItem>
             <MenuItem value={'Games'}>Games</MenuItem>

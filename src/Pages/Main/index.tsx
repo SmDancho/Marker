@@ -6,8 +6,6 @@ import type { RootState } from '../../redux/store';
 
 import { PostCard } from '../../entities/postCard';
 export const MainPage = () => {
-
-
   const dispatch = useAppDispatch();
   const { posts } = useAppSelector((state: RootState) => state.userPosts);
   const { user } = useAppSelector((state: RootState) => state.auth);
@@ -16,17 +14,11 @@ export const MainPage = () => {
   }, []);
 
   return (
-    <div className="flex justify-between">
-      <div>
+    <div className="flex justify-center lg:justify-start max-w-[1000px]">
+      <div className=" ">
         {posts.map((post) => (
           <PostCard {...post} key={post._id} />
         ))}
-      </div>
-      <div className="flex flex-col max-h-[300px] w-[300px] justify-between items-center mt-10 shadow-lg">
-        <div>
-          <Avatar alt={user?.username} src="/static/images/avatar/1.jpg" />
-          <div className='mt-5 font-bold text-lg'>{user?.username}</div>
-        </div>
       </div>
     </div>
   );

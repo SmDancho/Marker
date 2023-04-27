@@ -27,16 +27,17 @@ export const PostCard: FC<props> = ({
   const avergeRaiting = useAvergeRaiting(raiting);
   return (
     <Link to={`/Post/${_id}`}>
-      <div
-        className="max-w-[900px] flex mt-10  rounded-lg cursor-pointer"
-        onClick={() => console.log(_id)}
-      >
-        <div className="max-w-[400px] rounded-lg ">
-          <img src={`${image}`} alt="" className="block rounded-l-lg " />
+      <div className=" flex mt-10 justify-between m-auto flex-col rounded-lg cursor-pointer lg:flex-row ">
+        <div className=" rounded-lg max-w-[500px]">
+          <img
+            src={`${image}`}
+            alt=""
+            className="block rounded-l-lg max-w-full"
+          />
         </div>
-        <div className="px-5 flex flex-col justify-between gap-2 max-w-[500px] w-[500px]">
-          <div className="flex justify-between items-center w-full">
-            <div className="font-bold  text-[1.8rem]">{title}</div>
+        <div className="px-5 flex flex-col justify-between gap-2 w-full">
+          <div className="flex flex-col justify-between items-start w-full lg:flex-row lg:items-center ">
+            <div className="font-bold text-xl lg:text-3xl">{title}</div>
             <Rating name="simple-controlled" value={avergeRaiting} readOnly />
           </div>
 
