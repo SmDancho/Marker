@@ -17,12 +17,12 @@ export const LangSwitcher = () => {
     localStorage.setItem('lang', lang);
     setLang(localStorage.getItem('lang') as string);
     translate.changeLanguage(lang);
-  });
+  },[]);
 
   return (
     <>
       <Select
-        className="max-w-[100px] h-[40px]"
+        className="max-w-[100px] h-[40px] "
         labelId="demo-select-small"
         value={lang}
         onChange={(e) => handleLangChange(e)}

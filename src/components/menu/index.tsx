@@ -3,6 +3,9 @@ import MenuIcon from '@mui/icons-material/Menu';
 import IconButton from '@mui/material/IconButton';
 import MenuItem from '@mui/material/MenuItem';
 
+import { LangSwitcher } from '../../components/LangSwitcher';
+import { ThemeSwitcher } from '../themeSwitcher';
+
 import { Link } from 'react-router-dom';
 
 import { useState } from 'react';
@@ -47,6 +50,11 @@ export const MenuComponent = () => {
         <Link to={'/'}>
           <MenuItem>{translate.t('main')}</MenuItem>
         </Link>
+
+        <MenuItem>
+          <ThemeSwitcher />
+          <LangSwitcher />
+        </MenuItem>
       </Menu>
     </>
   );

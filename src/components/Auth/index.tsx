@@ -4,11 +4,13 @@ import { RootState } from '../../redux/store';
 
 import { registerUser, loginUser } from '../../redux/auth';
 
-import Button from '@mui/material/Button';
+import LoadingButton from '@mui/lab/LoadingButton';
+
 import TextField from '@mui/material/TextField';
 import Alert from '@mui/material/Alert';
 
 import { GoogleAuth } from '../googleAuth';
+import { TwitchAuthComponent } from '../twitchAuth';
 export const Auth = () => {
   const [register, setRegister] = useState(false);
   const [username, setUserName] = useState('');
@@ -16,7 +18,9 @@ export const Auth = () => {
 
   const dispatch = useAppDispatch();
 
-  const { status } = useAppSelector((state: RootState) => state.auth);
+  const { status, isLoading } = useAppSelector(
+    (state: RootState) => state.auth
+  );
 
   return (
     <div className="m-auto h-[100vh] flex justify-center items-center">
@@ -25,7 +29,10 @@ export const Auth = () => {
         className="flex flex-col w-[550px] gap-4"
       >
         {status && <Alert severity="info">{status}</Alert>}
-        <GoogleAuth />
+        <div className="flex items-center flex-col gap-4">
+          <GoogleAuth />
+          <TwitchAuthComponent />
+        </div>
         <TextField
           id="outlined-basic"
           label="Username"
@@ -39,8 +46,9 @@ export const Auth = () => {
           type="password"
           onChange={(e) => setPassword(e.target.value)}
         />
-        <Button
+        <LoadingButton
           variant="outlined"
+          loading={isLoading}
           onClick={() => {
             register
               ? dispatch(
@@ -58,7 +66,7 @@ export const Auth = () => {
           }}
         >
           {register ? 'Register' : 'Log in'}
-        </Button>
+        </LoadingButton>
         <span
           className="cursor-pointer"
           onClick={() => setRegister((prev) => !prev)}

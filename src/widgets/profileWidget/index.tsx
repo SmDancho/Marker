@@ -57,7 +57,11 @@ export const ProfileWidget: FC<props> = memo(
             <div>
               <div className="flex">
                 <div className="font-bold">{username}</div>
-                {isAdmin && <AdminPanelSettingsIcon />}
+                {isAdmin && (
+                  <span className="inline-flex items-center rounded-md bg-red-50 px-2 py-1 text-xs font-medium text-red-700 ring-1 ring-inset ring-red-600/10">
+                    Admin
+                  </span>
+                )}
               </div>
 
               <div>likes {userLikes[0]?.length}</div>

@@ -9,5 +9,6 @@
   "update": "update",
   "userRaiting":"user raiting",
   "avergeRaiting":"averge raiting",
-  "likes" : "likes"
+  "likes" : "likes",
+  "ConnectWithTwitch":"Connect with twitch"
 }

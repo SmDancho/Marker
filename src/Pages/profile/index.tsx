@@ -21,7 +21,6 @@ const Profile = () => {
     dispatch(getme());
     setActiveUser(user as user);
   }, [status]);
-  // console.log('render');
   return (
     <>
       {token ? (
