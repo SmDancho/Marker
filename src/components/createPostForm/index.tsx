@@ -72,10 +72,10 @@ const PostForm = () => {
       },
     };
   }, []);
-
+  // === 'fill all required fields'
   return (
     <>
-      {error === 'fill all required fields' && (
+      {error && (
         <Alert severity="error" className="mt-10">
           {error}
         </Alert>
