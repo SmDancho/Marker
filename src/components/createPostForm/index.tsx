@@ -72,7 +72,7 @@ const PostForm = () => {
       },
     };
   }, []);
-  // === 'fill all required fields'
+
   return (
     <>
       {error && (

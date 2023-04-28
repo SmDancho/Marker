@@ -70,6 +70,7 @@ export const addpost = createAsyncThunk(
         {
           headers: {
             Authorization: `Bearer ${useCookie('token')}`,
+            Accept: 'application/json',
             'Content-Type': 'multipart/form-data',
           },
         }
