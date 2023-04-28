@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState, memo } from 'react';
+import { useEffect, useMemo, useState, memo, useCallback } from 'react';
 import { useParams } from 'react-router-dom';
 import ReactMarkdown from 'react-markdown';
 
@@ -18,36 +18,37 @@ import Avatar from '@mui/material/Avatar';
 import TextField from '@mui/material/TextField';
 
 import SendIcon from '@mui/icons-material/Send';
-import Button from '@mui/material/Button';
+
 import InputAdornment from '@mui/material/InputAdornment';
 import { useAvergeRaiting } from '../../hooks/avergeRaiting';
+
 const PostPage = () => {
+  const dispatch = useAppDispatch();
   const { specificPost, status } = useAppSelector((state) => state.userPosts);
   const { user } = useAppSelector((state) => state.auth);
   const { id } = useParams();
 
   const [commentText, setCommentText] = useState<string>('');
-
-  const dispatch = useAppDispatch();
+  const [likes, setLikes] = useState<string[]>([]);
 
   const avergeRaiting = useAvergeRaiting(specificPost?.raiting);
 
-  const isLiked = () => {
-    return specificPost?.likes.some((like) => like === user?._id);
-  };
+  const isLiked = likes?.some((like) => like === user?._id);
 
   useEffect(() => {
     dispatch(getPostById(id as string));
     dispatch(getme());
-  }, [status]);
+    setLikes(specificPost?.likes as string[]);
+  }, [status, likes]);
 
   const handleLike = () => {
     dispatch(likePost(id as string));
+    isLiked ? setLikes(likes) : setLikes([...likes, user?._id as string]);
   };
 
-  const handleComment = () => {
+  const handleComment = useCallback(() => {
     dispatch(addComment({ _id: id as string, commentText }));
-  };
+  }, []);
   const handleRaiting = (rateValue: number) => {
     rateValue &&
       dispatch(addRaiting({ _id: id as string, value: rateValue as number }));
@@ -94,9 +95,9 @@ const PostPage = () => {
             className="cursor-pointer flex items-center gap-2 max-w-[50px]"
             onClick={() => handleLike()}
           >
-            {isLiked() ? <ThumbUpAltIcon /> : <ThumbUpOutlinedIcon />}
+            {isLiked ? <ThumbUpAltIcon /> : <ThumbUpOutlinedIcon />}
 
-            <span>{specificPost?.likes.length}</span>
+            <span>{likes?.length}</span>
           </div>
         </div>
 
