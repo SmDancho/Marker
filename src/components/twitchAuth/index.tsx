@@ -37,7 +37,10 @@ export const TwitchAuthComponent = () => {
         client_secret: import.meta.env.VITE_TWITCH_SECRET,
         grant_type: 'authorization_code',
         code: code,
-        redirect_uri: 'http://localhost:5173/Profile',
+        redirect_uri:
+          import.meta.env.MODE === 'development'
+            ? import.meta.env.VITE_TWITCH_REDIRECT_DEV
+            : import.meta.env.VITE_TWITCH_REDIRECT_PROD,
         scopse: 'user:edit',
       })
       .then((response) => setData(response.data));
@@ -69,12 +72,7 @@ export const TwitchAuthComponent = () => {
         >
           {translate.t('ConnectWithTwitch')}
         </a>
-        <img
-          width={30}
-          height={30}
-          src="/twitchIcon.png"
-          alt="twitch icon"
-        />
+        <img width={30} height={30} src="/twitchIcon.png" alt="twitch icon" />
       </button>
     </>
   );
