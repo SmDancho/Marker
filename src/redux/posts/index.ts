@@ -282,6 +282,10 @@ export const postSlice = createSlice({
     },
   },
   extraReducers: (builder) => {
+    builder.addCase(addpost.rejected, (state, action) => {
+      state.isLoading = false;
+      state.error = action.error.message as string;
+    });
     builder.addCase(addpost.pending, (state, action) => {
       state.isLoading = true;
     });
@@ -382,5 +386,5 @@ export const postSlice = createSlice({
   },
 });
 
-export const { activeFilter ,activeFilterByType} = postSlice.actions;
+export const { activeFilter, activeFilterByType } = postSlice.actions;
 export default postSlice.reducer;
