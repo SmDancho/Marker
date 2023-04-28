@@ -39,11 +39,11 @@ const PostPage = () => {
     dispatch(getPostById(id as string));
     dispatch(getme());
     setLikes(specificPost?.likes.length as number);
-  }, [status]);
+  }, [status, likes]);
 
   const handleLike = () => {
-     dispatch(likePost(id as string));
-    isLiked ? setLikes((prev) => prev - 1) : setLikes((prev) => prev + 1);
+    dispatch(likePost(id as string));
+    isLiked ? setLikes((prev) => --prev) : setLikes((prev) => ++prev);
   };
 
   const handleComment = () => {
