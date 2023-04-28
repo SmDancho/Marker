@@ -16,7 +16,7 @@ import ThumbUpAltIcon from '@mui/icons-material/ThumbUpAlt';
 import ThumbUpOutlinedIcon from '@mui/icons-material/ThumbUpOutlined';
 import Avatar from '@mui/material/Avatar';
 import TextField from '@mui/material/TextField';
-
+import IconButton from '@mui/material/IconButton';
 import SendIcon from '@mui/icons-material/Send';
 
 import InputAdornment from '@mui/material/InputAdornment';
@@ -29,26 +29,28 @@ const PostPage = () => {
   const { id } = useParams();
 
   const [commentText, setCommentText] = useState<string>('');
-  const [likes, setLikes] = useState<string[]>([]);
+  const [likes, setLikes] = useState<number>(0);
 
   const avergeRaiting = useAvergeRaiting(specificPost?.raiting);
 
-  const isLiked = likes?.some((like) => like === user?._id);
+  const isLiked = specificPost?.likes.some((like) => like === user?._id);
 
   useEffect(() => {
     dispatch(getPostById(id as string));
     dispatch(getme());
-    setLikes(specificPost?.likes as string[]);
-  }, [status, likes]);
+    setLikes(specificPost?.likes.length as number);
+  }, [status]);
 
   const handleLike = () => {
     dispatch(likePost(id as string));
-    isLiked ? setLikes(likes) : setLikes([...likes, user?._id as string]);
+    isLiked
+      ? setLikes(specificPost?.likes.length as number)
+      : setLikes(specificPost?.likes.length as number);
   };
 
-  const handleComment = useCallback(() => {
-    dispatch(addComment({ _id: id as string, commentText }));
-  }, []);
+  const handleComment = () => {
+    commentText && dispatch(addComment({ _id: id as string, commentText }));
+  };
   const handleRaiting = (rateValue: number) => {
     rateValue &&
       dispatch(addRaiting({ _id: id as string, value: rateValue as number }));
@@ -95,9 +97,17 @@ const PostPage = () => {
             className="cursor-pointer flex items-center gap-2 max-w-[50px]"
             onClick={() => handleLike()}
           >
-            {isLiked ? <ThumbUpAltIcon /> : <ThumbUpOutlinedIcon />}
+            {isLiked ? (
+              <IconButton>
+                <ThumbUpAltIcon />
+              </IconButton>
+            ) : (
+              <IconButton>
+                <ThumbUpOutlinedIcon />
+              </IconButton>
+            )}
 
-            <span>{likes?.length}</span>
+            <span>{likes}</span>
           </div>
         </div>
 
