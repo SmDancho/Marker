@@ -169,7 +169,6 @@ const PostForm = () => {
               handleChange={(file: File) => setImg(file)}
               name="file"
               types={fileTypes}
-              
             />
           )}
         </div>
