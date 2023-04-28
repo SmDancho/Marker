@@ -28,10 +28,10 @@ export const UserPostCard: FC<post> = ({ title, image, _id, text }) => {
         PaperComponent={Paper}
       >
         <DialogTitle style={{ cursor: 'move' }} id="draggable-dialog-title">
-          Warning you are trying to delete post
+          {translate.t('warning')}
         </DialogTitle>
         <DialogContent>
-          <DialogContentText>To delete post press delete</DialogContentText>
+          <DialogContentText>{translate.t('toDelete')}</DialogContentText>
         </DialogContent>
         <DialogActions>
           <Button autoFocus onClick={() => setConfirm(false)}>

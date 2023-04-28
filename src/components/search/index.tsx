@@ -9,7 +9,12 @@ import { search } from '../../redux/posts';
 import { useDebounce } from '../../hooks/debonce';
 import { useAppDispatch } from '../../redux/store';
 import { useState } from 'react';
+
+import translate from '../../utils/i18/i18n';
+import { useTranslation } from 'react-i18next';
+
 export const Search = () => {
+  const { t } = useTranslation();
   const [searchRequest, setSearchRequest] = useState<string>('');
   const dispatch = useAppDispatch();
   const debonced = useDebounce(searchRequest);
@@ -20,7 +25,7 @@ export const Search = () => {
   return (
     <>
       <TextField
-        label="Search field"
+        label={translate.t('search')}
         type="search"
         variant="outlined"
         onChange={(e) => {

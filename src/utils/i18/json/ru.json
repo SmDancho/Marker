@@ -10,5 +10,16 @@
   "userRaiting": "рейтинг пользователя",
   "avergeRaiting": "общий рейтинг",
   "likes": "лайки",
-  "ConnectWithTwitch": "Войти через твич"
+  "ConnectWithTwitch": "Войти через твич",
+  "userProfile": "профиль",
+  "title": "*заголовок",
+  "topic": "*Тема",
+  "tags": "*Тэги",
+  "mark": "*Оценка (from 1 to 10)",
+  "group": "*Группа",
+  "review": "Рецензия",
+  "create": "Создать",
+  "warning": "Вы пытаетесь удалить обзор",
+  "toDelete": "Что бы удалить нажмите удалить",
+  "search": "поиск"
 }

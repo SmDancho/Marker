@@ -5,10 +5,8 @@ import IconButton from '@mui/material/IconButton';
 import AccountCircle from '@mui/icons-material/AccountCircle';
 
 import { MenuComponent } from '../../components/menu';
-import { LangSwitcher } from '../../components/LangSwitcher';
-import { Search } from '../../components/search';
 
-import { useEffect, useState } from 'react';
+import { Search } from '../../components/search';
 
 export const Header = () => {
   return (

@@ -7,8 +7,19 @@
   "cancel": "cancel",
   "post": "post",
   "update": "update",
-  "userRaiting":"user raiting",
-  "avergeRaiting":"averge raiting",
-  "likes" : "likes",
-  "ConnectWithTwitch":"Connect with twitch"
+  "userRaiting": "user raiting",
+  "avergeRaiting": "averge raiting",
+  "likes": "likes",
+  "ConnectWithTwitch": "Connect with twitch",
+  "userProfile": "profile",
+  "title": "*Title",
+  "topic": "*Topic",
+  "tags": "*Tags",
+  "mark": "*Your mark (from 1 to 10)",
+  "group": "*Group",
+  "review": "Review",
+  "create": "create",
+  "warning": "Warning you are trying to delete post",
+  "toDelete": "To delete post press delete",
+  "search":"search"
 }
