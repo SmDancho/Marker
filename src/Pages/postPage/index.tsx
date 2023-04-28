@@ -42,10 +42,8 @@ const PostPage = () => {
   }, [status]);
 
   const handleLike = () => {
-    dispatch(likePost(id as string));
-    isLiked
-      ? setLikes(specificPost?.likes.length as number)
-      : setLikes(specificPost?.likes.length as number);
+     dispatch(likePost(id as string));
+    isLiked ? setLikes((prev) => prev - 1) : setLikes((prev) => prev + 1);
   };
 
   const handleComment = () => {
