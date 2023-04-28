@@ -102,7 +102,7 @@ const PostPage = () => {
 
         <div>
           <div className="flex gap-2 items-center">
-            <Avatar alt="Remy Sharp" src="/static/images/avatar/1.jpg" />
+            <Avatar alt={`${user?.username}`} src="123" />
             <div className="flex flex-col justify-between items-center w-full gap-2 lg:flex-row">
               <TextField
                 value={commentText}
@@ -132,7 +132,7 @@ const PostPage = () => {
             {specificPost?.comments.map((comment) => (
               <div className="flex gap-5 items-center mt-10" key={comment._id}>
                 <Avatar
-                  alt={`${user?.username}`}
+                  alt={`${comment.username}`}
                   src="/static/images/avatar/1.jpg"
                 />
                 <div className="flex flex-col">
