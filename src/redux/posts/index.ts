@@ -1,5 +1,4 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
-import axios, { AxiosError } from 'axios';
 import type { post } from '../../types';
 import { useCookie } from '../../hooks/getToken';
 import { instance } from '../../utils/axios';
@@ -54,9 +53,9 @@ export const addpost = createAsyncThunk(
     authorRaiting,
     userId,
   }: postData) => {
-    const data = await axios
+    const data = await instance
       .post(
-        'http://localhost:5000/post/add',
+        '/post/add',
         {
           title,
           topic,
