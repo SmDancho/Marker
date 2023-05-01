@@ -1,10 +1,8 @@
 import { useState, useEffect, lazy, Suspense } from 'react';
 import { Routes, Route } from 'react-router-dom';
-import CircularProgress from '@mui/material/CircularProgress';
 
+import { CircularProgress, CssBaseline, Container } from '@mui/material';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
-import CssBaseline from '@mui/material/CssBaseline';
-import Container from '@mui/material/Container';
 
 import { Header } from './widgets/header';
 import { MainPage } from './Pages/Main';
@@ -14,6 +12,7 @@ const PostPage = lazy(() => import('./Pages/postPage'));
 const SearchedPostsPage = lazy(() => import('./Pages/searchedPost'));
 const UserPage = lazy(() => import('./Pages/userPage'));
 const UpdateForm = lazy(() => import('./components/updateForm'));
+const CreateForm = lazy(() => import('./components/createPostForm'));
 
 function App() {
   const [mode, setMode] = useState<'light' | 'dark'>(
@@ -39,14 +38,14 @@ function App() {
   return (
     <>
       <ThemeProvider theme={darkTheme}>
-        <Container maxWidth='xl'>
+        <Container maxWidth="xl">
           <CssBaseline />
           <Header />
           <Suspense
             fallback={
-                <div className="flex w-full h-[100vh] justify-center items-center" >
-                  <CircularProgress />
-                </div>
+              <div className="flex w-full h-[100vh] justify-center items-center">
+                <CircularProgress />
+              </div>
             }
           >
             <Routes>
@@ -57,6 +56,7 @@ function App() {
               <Route path="/search" element={<SearchedPostsPage />} />
               <Route path="/search" element={<SearchedPostsPage />} />
               <Route path="/user/:id" element={<UserPage />} />
+              <Route path="/create" element={<CreateForm />} />
             </Routes>
           </Suspense>
         </Container>

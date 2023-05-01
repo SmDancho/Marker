@@ -1,5 +1,5 @@
-import { useEffect, useMemo, useState, memo, useCallback } from 'react';
-import { useParams } from 'react-router-dom';
+import { useEffect, useState,  } from 'react';
+import { useParams, useNavigate } from 'react-router-dom';
 import ReactMarkdown from 'react-markdown';
 
 import { useAppDispatch, useAppSelector } from '../../redux/store';
@@ -11,21 +11,20 @@ import {
 } from '../../redux/posts';
 import { getme } from '../../redux/auth';
 
-import Rating from '@mui/material/Rating';
 import ThumbUpAltIcon from '@mui/icons-material/ThumbUpAlt';
 import ThumbUpOutlinedIcon from '@mui/icons-material/ThumbUpOutlined';
-import Avatar from '@mui/material/Avatar';
-import TextField from '@mui/material/TextField';
-import IconButton from '@mui/material/IconButton';
 import SendIcon from '@mui/icons-material/Send';
+
+import { Rating, Avatar, TextField, IconButton } from '@mui/material';
 
 import InputAdornment from '@mui/material/InputAdornment';
 import { useAvergeRaiting } from '../../hooks/avergeRaiting';
 
 const PostPage = () => {
   const dispatch = useAppDispatch();
+  const navigate = useNavigate();
   const { specificPost, status } = useAppSelector((state) => state.userPosts);
-  const { user } = useAppSelector((state) => state.auth);
+  const { user, token } = useAppSelector((state) => state.auth);
   const { id } = useParams();
 
   const [commentText, setCommentText] = useState<string>('');
@@ -42,14 +41,23 @@ const PostPage = () => {
   }, [status, likes]);
 
   const handleLike = () => {
+    if (!token) {
+      navigate('/Profile');
+    }
     dispatch(likePost(id as string));
     isLiked ? setLikes((prev) => --prev) : setLikes((prev) => ++prev);
   };
 
   const handleComment = () => {
+    if (!token) {
+      navigate('/Profile');
+    }
     commentText && dispatch(addComment({ _id: id as string, commentText }));
   };
   const handleRaiting = (rateValue: number) => {
+    if (!token) {
+      navigate('/Profile');
+    }
     rateValue &&
       dispatch(addRaiting({ _id: id as string, value: rateValue as number }));
   };
@@ -121,10 +129,17 @@ const PostPage = () => {
                 onChange={(e: any) => {
                   setCommentText(e.target.value);
                 }}
+                onKeyUp={(e) => {
+                  if (e.key === 'Enter') {
+                    handleComment();
+                    setCommentText('');
+                  }
+                }}
                 InputProps={{
                   endAdornment: (
                     <InputAdornment
                       position="end"
+                      className="cursor-pointer"
                       onClick={() => {
                         handleComment();
                         setCommentText('');

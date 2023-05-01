@@ -1,10 +1,10 @@
 import SearchIcon from '@mui/icons-material/Search';
-import TextField from '@mui/material/TextField';
+import { TextField } from '@mui/material';
 
 import { search } from '../../redux/posts';
 
 import { useDebounce } from '../../hooks/debonce';
-import { useAppDispatch, useAppSelector } from '../../redux/store';
+import { useAppDispatch } from '../../redux/store';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
@@ -18,7 +18,6 @@ export const Search = () => {
   const debonced = useDebounce(searchRequest, 500);
   const navigate = useNavigate();
   const { t } = useTranslation();
-
 
   const handleSearch = () => {
     dispatch(search(debonced));
@@ -42,7 +41,9 @@ export const Search = () => {
           e.key === 'Enter' ? handleSearch() : false;
         }}
       />
-      <span className="text-sm hidden lg:block">{translate.t('pressEnter')}</span>
+      <span className="text-sm hidden lg:block">
+        {translate.t('pressEnter')}
+      </span>
     </div>
   );
 };
