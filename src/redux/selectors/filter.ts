@@ -7,39 +7,45 @@ import type { post } from '../../types';
 export const filter = (state: RootState) => state.userPosts.filter;
 export const typeFilter = (state: RootState) => state.userPosts.typeFilter;
 export const posts = (state: RootState) => state.userPosts.UserPost;
+export const allPosts = (state: RootState) => state.userPosts.posts;
 
-export const filteredPosts = createSelector(
+const filterFunction = (type: string, filter: string, data: post[]) => {
+  const byLikes = data
+    .filter((item: post) => (filter === 'All' ? item : item.group === filter))
+    .sort((a: post, b: post) => {
+      return b.likes.length - a.likes.length;
+    });
+
+  const byUserRate = data
+    .filter((item: post) => (filter === 'All' ? item : item.group === filter))
+    .sort((a: post, b: post) => b.authorRaiting - a.authorRaiting);
+
+  const byAvgRating = data
+    .filter((item: post) => (filter === 'All' ? item : item.group === filter))
+    .sort(
+      (a: post, b: post) =>
+        useAvergeRaiting(b.raiting) - useAvergeRaiting(a.raiting)
+    );
+
+  if (type === 'likes') return byLikes;
+
+  if (type === 'userRaiting') {
+    return byUserRate;
+  }
+
+  return byAvgRating;
+};
+
+export const filteredUserPosts = createSelector(
   [filter, typeFilter, posts],
   (activeFilter, activeTypeFilter, allPosts) => {
-    const byLikes = allPosts
-      .filter((item) =>
-        activeTypeFilter === 'All' ? item : item.group === activeTypeFilter
-      )
-      .sort((a: post, b: post) => {
-        return b.likes.length - a.likes.length;
-      });
+    return filterFunction(activeFilter, activeTypeFilter, allPosts);
+  }
+);
 
-    const byUserRate = allPosts
-      .filter((item) =>
-        activeTypeFilter === 'All' ? item : item.group === activeTypeFilter
-      )
-      .sort((a: post, b: post) => b.authorRaiting - a.authorRaiting);
-      
-    const byAvgRating = allPosts
-      .filter((item) =>
-        activeTypeFilter === 'All' ? item : item.group === activeTypeFilter
-      )
-      .sort(
-        (a: post, b: post) =>
-          useAvergeRaiting(b.raiting) - useAvergeRaiting(a.raiting)
-      );
-
-    if (activeFilter === 'likes') return byLikes;
-
-    if (activeFilter === 'userRaiting') {
-      return byUserRate;
-    }
-
-    return byAvgRating;
+export const filteredAllPosts = createSelector(
+  [filter, typeFilter, allPosts],
+  (activeFilter, activeTypeFilter, allPosts) => {
+    return filterFunction(activeFilter, activeTypeFilter, allPosts);
   }
 );

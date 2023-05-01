@@ -1,18 +1,10 @@
-import { useState, useEffect, lazy, Suspense } from 'react';
-import { Routes, Route } from 'react-router-dom';
+import { useState, useEffect } from 'react';
 
-import { CircularProgress, CssBaseline, Container } from '@mui/material';
+import { CssBaseline, Container } from '@mui/material';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 
 import { Header } from './widgets/header';
-import { MainPage } from './Pages/Main';
-
-const ProfilePage = lazy(() => import('./Pages/profile'));
-const PostPage = lazy(() => import('./Pages/postPage'));
-const SearchedPostsPage = lazy(() => import('./Pages/searchedPost'));
-const UserPage = lazy(() => import('./Pages/userPage'));
-const UpdateForm = lazy(() => import('./components/updateForm'));
-const CreateForm = lazy(() => import('./components/createPostForm'));
+import { Router } from './router';
 
 function App() {
   const [mode, setMode] = useState<'light' | 'dark'>(
@@ -38,28 +30,7 @@ function App() {
   return (
     <>
       <ThemeProvider theme={darkTheme}>
-        <Container maxWidth="xl">
-          <CssBaseline />
-          <Header />
-          <Suspense
-            fallback={
-              <div className="flex w-full h-[100vh] justify-center items-center">
-                <CircularProgress />
-              </div>
-            }
-          >
-            <Routes>
-              <Route path="/" element={<MainPage />} />
-              <Route path="/Profile" element={<ProfilePage />} />
-              <Route path="/Post/:id" element={<PostPage />} />
-              <Route path="/Update/:id" element={<UpdateForm />} />
-              <Route path="/search" element={<SearchedPostsPage />} />
-              <Route path="/search" element={<SearchedPostsPage />} />
-              <Route path="/user/:id" element={<UserPage />} />
-              <Route path="/create" element={<CreateForm />} />
-            </Routes>
-          </Suspense>
-        </Container>
+        <Router />
       </ThemeProvider>
     </>
   );
