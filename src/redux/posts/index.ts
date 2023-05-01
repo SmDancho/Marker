@@ -18,12 +18,12 @@ interface postData {
 export interface postState {
   UserPost: post[];
   isLoading: boolean;
-  status: string | null;
+  status: string;
   allTags: string[];
   posts: post[];
   specificPost: post | null;
   searchedPosts: post[];
-  error: string | null;
+  error: string;
   filter: string;
   typeFilter: string;
 }
@@ -31,11 +31,11 @@ export interface postState {
 const initialState: postState = {
   UserPost: [],
   isLoading: false,
-  status: null,
+  status: '',
   allTags: [],
   posts: [],
   specificPost: null,
-  error: null,
+  error: '',
   searchedPosts: [],
   filter: '',
   typeFilter: '',

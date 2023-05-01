@@ -14,8 +14,7 @@ import { AllUsers } from '../../entities/allUsersCard';
 import { UserPosts } from '../userPosts';
 
 import translate from '../../utils/i18/i18n';
-
-const PostForm = lazy(() => import('../../components/createPostForm'));
+import { Link } from 'react-router-dom';
 
 interface props {
   username: string;
@@ -30,18 +29,11 @@ export const ProfileWidget: FC<props> = memo(
     const dispatch = useAppDispatch();
     const { t } = useTranslation();
 
-    const [isOpenForm, setIsOpenForm] = useState(false);
-
     const { allUsers } = useAppSelector((state) => state.auth);
     const { UserPost, status } = useAppSelector((state) => state.userPosts);
 
-    const handelOpenForm = () => {
-      setIsOpenForm((prev) => !prev);
-    };
 
     useEffect(() => {
-      status === 'Created successfully' && setIsOpenForm(false);
-
       dispatch(getUserPosts(_id as string));
       dispatch(getUsers());
     }, [status, _id]);
@@ -81,19 +73,18 @@ export const ProfileWidget: FC<props> = memo(
         </div>
         <section className="mt-5">
           <div>
-            <Button
-              variant="outlined"
-              onClick={() => {
-                handelOpenForm();
-              }}
-            >
-              {isOpenForm ? translate.t('close') : translate.t('createReview')}
-            </Button>
+            <Link to={'/create'}>
+              <Button
+                variant="outlined"
+              >
+                {translate.t('createReview')}
+              </Button>
+            </Link>
           </div>
         </section>
 
         <section className="flex gap-5 flex-wrap m-auto">
-          {isOpenForm ? <PostForm /> : <UserPosts />}
+          <UserPosts />
         </section>
 
         <section className="mt-5">

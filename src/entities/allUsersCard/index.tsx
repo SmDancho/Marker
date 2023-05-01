@@ -25,7 +25,7 @@ const checkUSerRoel = (role: string, usersRoles: string[]) => {
 export const AllUsers: FC<props> = ({ username, _id, roles }) => {
   const dispatch = useAppDispatch();
   const { status } = useAppSelector((state) => state.auth);
-
+  const [toDelete, setTodelete] = useState(false);
   const { t } = useTranslation();
 
   const [blockStatus, setBlockStatus] = useState<boolean>(
@@ -39,7 +39,7 @@ export const AllUsers: FC<props> = ({ username, _id, roles }) => {
     dispatch(blockUser(_id));
     setBlockStatus((prev) => !prev);
   };
-  const handleDelete = () => {
+  const handleDeleteUser = () => {
     dispatch(deleteUser(_id));
   };
   const handleAdmin = () => {
@@ -51,7 +51,7 @@ export const AllUsers: FC<props> = ({ username, _id, roles }) => {
   }, [status]);
   return (
     <>
-      <ConfirmDiolg deleteFunction={handleDelete} />
+      {toDelete && <ConfirmDiolg deleteFunction={handleDeleteUser} />}
 
       <div className="flex items-center shadow-xl  justify-between  mt-5 rounded-lg p-5 hover:bg-[#98c5f380] transition-all">
         {username}
@@ -62,7 +62,10 @@ export const AllUsers: FC<props> = ({ username, _id, roles }) => {
           <Button
             variant="outlined"
             color="error"
-            onClick={() => dispatch(openConfirm(true))}
+            onClick={() => {
+              dispatch(openConfirm(true));
+              setTodelete((prev) => !prev);
+            }}
           >
             delete user
           </Button>

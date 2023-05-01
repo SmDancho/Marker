@@ -1,25 +1,38 @@
-import TextField from '@mui/material/TextField';
-import Select from '@mui/material/Select';
-import MenuItem from '@mui/material/MenuItem';
-import Autocomplete from '@mui/material/Autocomplete';
-import InputLabel from '@mui/material/InputLabel';
-import LoadingButton from '@mui/lab/LoadingButton';
-import Alert from '@mui/material/Alert';
+import { useState, useMemo, useEffect } from 'react';
 
+import {
+  TextField,
+  Select,
+  MenuItem,
+  Autocomplete,
+  InputLabel,
+  Alert,
+} from '@mui/material';
+
+import { LoadingButton } from '@mui/lab';
 import { FileUploader } from 'react-drag-drop-files';
 import SimpleMDE from 'react-simplemde-editor';
 
 import { addpost, getTags } from '../../redux/posts';
 
 import { useAppDispatch, useAppSelector } from '../../redux/store';
-import { useState, useMemo, useEffect } from 'react';
 import { useDebounce } from '../../hooks/debonce';
+import { useTranslation } from 'react-i18next';
+import { useNavigate } from 'react-router-dom';
+
+import translate from '../../utils/i18/i18n';
 
 import 'easymde/dist/easymde.min.css';
-import translate from '../../utils/i18/i18n';
-import { useTranslation } from 'react-i18next';
-
 const PostForm = () => {
+  const fileTypes = ['JPG', 'PNG', 'GIF'];
+  const dispatch = useAppDispatch();
+  const navigate = useNavigate();
+
+  const { isLoading, allTags, error, status } = useAppSelector(
+    (state) => state.userPosts
+  );
+  const { user, viewUser } = useAppSelector((state) => state.auth);
+
   const [title, setTitle] = useState<string>('');
   const [topic, setTopic] = useState<string>('');
   const [image, setImg] = useState<File>();
@@ -34,18 +47,12 @@ const PostForm = () => {
   const deboncedValue: string = useDebounce(tagString);
   const { t } = useTranslation();
 
-  const fileTypes = ['JPG', 'PNG', 'GIF'];
-  const { isLoading, allTags, error } = useAppSelector(
-    (state) => state.userPosts
-  );
-
-  const { user, viewUser } = useAppSelector((state) => state.auth);
-
-  const dispatch = useAppDispatch();
-
   useEffect(() => {
     dispatch(getTags());
-  }, []);
+    if (status === 'Created successfully') {
+      navigate('/Profile');
+    }
+  }, [status]);
 
   const handleSubmit = () => {
     dispatch(

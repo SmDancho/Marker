@@ -1,4 +1,4 @@
-import { FC, useEffect, memo } from 'react';
+import { FC, useState } from 'react';
 import { post } from '../../types';
 import { Link } from 'react-router-dom';
 import Button from '@mui/material/Button';
@@ -15,9 +15,10 @@ import translate from '../../utils/i18/i18n';
 
 export const UserPostCard: FC<post> = ({ title, _id }) => {
   const dispatch = useAppDispatch();
+  const [toDelete, setTodelete] = useState(false);
   const { user, viewUser } = useAppSelector((state) => state.auth);
   const { t } = useTranslation();
-  const handleDelete = () => {
+  const handleDeletePost = () => {
     dispatch(
       deletePost({
         postId: _id,
@@ -28,7 +29,7 @@ export const UserPostCard: FC<post> = ({ title, _id }) => {
 
   return (
     <>
-      <ConfirmDiolg deleteFunction={handleDelete} />
+      {toDelete && <ConfirmDiolg deleteFunction={handleDeletePost} />}
 
       <div className="flex items-center shadow-xl  justify-between  mt-5 rounded-lg p-5 hover:bg-[#98c5f380] transition-all">
         <div>{title}</div>
@@ -42,6 +43,7 @@ export const UserPostCard: FC<post> = ({ title, _id }) => {
             variant="outlined"
             color="error"
             onClick={() => {
+              setTodelete((prev) => !prev);
               dispatch(openConfirm(true));
             }}
           >
