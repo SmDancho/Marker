@@ -16,6 +16,8 @@ import { useState, useMemo, useEffect } from 'react';
 import { useDebounce } from '../../hooks/debonce';
 
 import 'easymde/dist/easymde.min.css';
+import translate from '../../utils/i18/i18n';
+import { useTranslation } from 'react-i18next';
 
 const PostForm = () => {
   const [title, setTitle] = useState<string>('');
@@ -30,6 +32,8 @@ const PostForm = () => {
   const [authorRaiting, setAuthorRaiting] = useState<number>(0);
 
   const deboncedValue: string = useDebounce(tagString);
+  const { t } = useTranslation();
+
   const fileTypes = ['JPG', 'PNG', 'GIF'];
   const { isLoading, allTags, error } = useAppSelector(
     (state) => state.userPosts
@@ -64,7 +68,7 @@ const PostForm = () => {
   const textOptions = useMemo(() => {
     return {
       spellChecker: false,
-      placeholder: 'Review',
+      placeholder: translate.t('review'),
       autosave: {
         uniqueId: 'demo',
         enabled: true,
@@ -84,7 +88,7 @@ const PostForm = () => {
         <div className="flex justify-between gap-2">
           <TextField
             className="w-full"
-            label="*Title"
+            label={translate.t('title')}
             variant="outlined"
             helperText="Title is required"
             onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
@@ -93,7 +97,7 @@ const PostForm = () => {
           />
           <TextField
             className="w-full"
-            label="*Topic"
+            label={translate.t('topic')}
             helperText="Title is required"
             variant="outlined"
             onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
@@ -117,13 +121,13 @@ const PostForm = () => {
             <TextField
               {...params}
               variant="outlined"
-              label="Tags"
+              label={translate.t('tags')}
               placeholder="Favorites"
             />
           )}
         />
 
-        <InputLabel id="your-mark">*your mark (from 1 to 10)</InputLabel>
+        <InputLabel id="your-mark">{translate.t('mark')}</InputLabel>
 
         <Select
           labelId="your-mark"
@@ -142,7 +146,9 @@ const PostForm = () => {
           <MenuItem value={10}>10</MenuItem>
         </Select>
 
-        <InputLabel id="demo-simple-select-label">*Group</InputLabel>
+        <InputLabel id="demo-simple-select-label">
+          {translate.t('group')}
+        </InputLabel>
         <Select
           labelId="demo-simple-select-label"
           value={group}
@@ -179,7 +185,7 @@ const PostForm = () => {
             handleSubmit();
           }}
         >
-          Create
+          {translate.t('create')}
         </LoadingButton>
       </form>
     </>

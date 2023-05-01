@@ -3,19 +3,24 @@ import IconButton from '@mui/material/IconButton';
 import Brightness4Icon from '@mui/icons-material/Brightness4';
 import Brightness7Icon from '@mui/icons-material/Brightness7';
 
+enum themeType {
+  dark = 'dark',
+  light = 'light',
+}
+
 export const ThemeSwitcher = () => {
-  const [theme, setTheme] = useState<'light' | 'dark'>(
-    (localStorage.getItem('theme') as 'light' | 'dark') || 'dark'
+  const [theme, setTheme] = useState<themeType>(
+    (localStorage.getItem('theme') as themeType) || 'dark'
   );
 
   const handleThemeChange = () => {
-    setTheme(theme === 'dark' ? 'light' : 'dark');
+    setTheme(theme === 'dark' ? themeType.light : themeType.dark);
     localStorage.setItem('theme', theme);
     window.dispatchEvent(new Event('storageUpdated'));
   };
 
   useEffect(() => {
-    setTheme(theme === 'dark' ? 'light' : 'dark');
+    handleThemeChange();
   }, []);
   return (
     <IconButton onClick={handleThemeChange} color="inherit">
