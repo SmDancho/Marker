@@ -16,6 +16,7 @@ export interface authState {
   isLoading: boolean;
   status: null | string;
   allUsers: user[];
+  isOpenConfirm: boolean;
 }
 
 const initialState: authState = {
@@ -25,6 +26,8 @@ const initialState: authState = {
   isLoading: false,
   status: null,
   allUsers: [],
+  isOpenConfirm: false,
+ 
 };
 
 export const googleAuth = createAsyncThunk(
@@ -115,7 +118,7 @@ export const getme = createAsyncThunk('authSlice/getme', async () => {
 
 export const getUsers = createAsyncThunk('authSlice/getUsers', async () => {
   const data = await instance
-    .get('/auth/users', {})
+    .get('/users/all')
     .then((response) => response.data);
   return data;
 });
@@ -123,7 +126,45 @@ export const getUserByID = createAsyncThunk(
   'postSlice/getUserByID',
   async (id: string) => {
     const data = await instance
-      .post('/auth/getUserByid', { id })
+      .post('/users/getUserByid', { id })
+      .then((response) => {
+        return response.data;
+      });
+
+    return data;
+  }
+);
+
+export const deleteUser = createAsyncThunk(
+  'postSlice/deleteUser',
+  async (id: string) => {
+    const data = await instance
+      .post('/users/delete', { id })
+      .then((response) => {
+        return response.data;
+      });
+
+    return data;
+  }
+);
+export const blockUser = createAsyncThunk(
+  'postSlice/blockUser',
+  async (id: string) => {
+    const data = await instance
+      .post('/users/block', { id })
+      .then((response) => {
+        return response.data;
+      });
+
+    return data;
+  }
+);
+
+export const makeAdmin = createAsyncThunk(
+  'postSlice/makeAdmin',
+  async (id: string) => {
+    const data = await instance
+      .post('/users/admin', { id })
       .then((response) => {
         return response.data;
       });
@@ -143,12 +184,50 @@ export const authSlice = createSlice({
       state.isLoading = false;
       state.status = null;
     },
+    openConfirm: (state, action) => {
+      state.isOpenConfirm = action.payload;
+    },
   },
   extraReducers: (builder) => {
-    builder.addCase(twitchAuth.rejected, (state, action) => {
+    builder.addCase(blockUser.rejected, (state) => {
       state.isLoading = false;
     });
-    builder.addCase(twitchAuth.pending, (state, action) => {
+    builder.addCase(blockUser.pending, (state) => {
+      state.isLoading = true;
+    });
+
+    builder.addCase(blockUser.fulfilled, (state, action) => {
+      state.isLoading = false;
+      state.status = action.payload.message;
+      state.viewUser = null;
+    });
+    builder.addCase(makeAdmin.rejected, (state) => {
+      state.isLoading = false;
+    });
+    builder.addCase(makeAdmin.pending, (state) => {
+      state.isLoading = true;
+    });
+
+    builder.addCase(makeAdmin.fulfilled, (state, action) => {
+      state.isLoading = false;
+      state.status = action.payload.message;
+    });
+    builder.addCase(deleteUser.rejected, (state) => {
+      state.isLoading = false;
+    });
+    builder.addCase(deleteUser.pending, (state) => {
+      state.isLoading = true;
+    });
+
+    builder.addCase(deleteUser.fulfilled, (state, action) => {
+      state.isLoading = false;
+      state.status = action.payload.message;
+      state.viewUser = null;
+    });
+    builder.addCase(twitchAuth.rejected, (state) => {
+      state.isLoading = false;
+    });
+    builder.addCase(twitchAuth.pending, (state) => {
       state.isLoading = true;
     });
 
@@ -158,7 +237,7 @@ export const authSlice = createSlice({
       state.status = action.payload.message;
       state.user = action.payload.user;
     });
-    builder.addCase(getUserByID.pending, (state, action) => {
+    builder.addCase(getUserByID.pending, (state) => {
       state.isLoading = true;
     });
 
@@ -167,7 +246,7 @@ export const authSlice = createSlice({
       state.status = action.payload.message;
       state.viewUser = action.payload;
     });
-    builder.addCase(getUsers.pending, (state, action) => {
+    builder.addCase(getUsers.pending, (state) => {
       state.isLoading = true;
     });
 
@@ -176,7 +255,7 @@ export const authSlice = createSlice({
       state.allUsers = action.payload;
     });
 
-    builder.addCase(googleAuth.pending, (state, action) => {
+    builder.addCase(googleAuth.pending, (state) => {
       state.isLoading = true;
     });
 
@@ -187,7 +266,7 @@ export const authSlice = createSlice({
       state.user = action.payload.user;
     });
 
-    builder.addCase(registerUser.pending, (state, action) => {
+    builder.addCase(registerUser.pending, (state) => {
       state.isLoading = true;
     });
 
@@ -198,7 +277,7 @@ export const authSlice = createSlice({
       state.user = action.payload.user;
     });
 
-    builder.addCase(loginUser.pending, (state, action) => {
+    builder.addCase(loginUser.pending, (state) => {
       state.isLoading = true;
     });
 
@@ -209,10 +288,10 @@ export const authSlice = createSlice({
       state.status = action.payload.message;
       state.user = action.payload.user;
     });
-    builder.addCase(getme.rejected, (state, action) => {
+    builder.addCase(getme.rejected, (state) => {
       state.isLoading = false;
     });
-    builder.addCase(getme.pending, (state, action) => {
+    builder.addCase(getme.pending, (state) => {
       state.isLoading = true;
     });
 
@@ -226,6 +305,6 @@ export const authSlice = createSlice({
 });
 
 export const checkIsAuth = (state: RootState) => Boolean(state.auth.token);
-export const { logout } = authSlice.actions;
+export const { logout, openConfirm } = authSlice.actions;
 
 export default authSlice.reducer;

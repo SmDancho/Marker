@@ -2,7 +2,6 @@ import { useState, useEffect, useMemo, memo, lazy } from 'react';
 import { FC } from 'react';
 import Button from '@mui/material/Button';
 import Avatar from '@mui/material/Avatar';
-import AdminPanelSettingsIcon from '@mui/icons-material/AdminPanelSettings';
 
 import { useTranslation } from 'react-i18next';
 

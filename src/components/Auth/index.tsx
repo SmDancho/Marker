@@ -34,13 +34,13 @@ export const Auth = () => {
           <TwitchAuthComponent />
         </div>
         <TextField
-          id="outlined-basic"
+          id="username"
           label="Username"
           variant="outlined"
           onChange={(e) => setUserName(e.target.value)}
         />
         <TextField
-          id="outlined-basic"
+          id="password"
           label="Password"
           variant="outlined"
           type="password"

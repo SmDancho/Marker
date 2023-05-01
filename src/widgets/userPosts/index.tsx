@@ -1,8 +1,7 @@
+import { useState, useEffect, memo } from 'react';
+
 import MenuItem from '@mui/material/MenuItem';
 import Select, { SelectChangeEvent } from '@mui/material/Select';
-
-import { useState, useEffect } from 'react';
-
 import RadioGroup from '@mui/material/RadioGroup';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Radio from '@mui/material/Radio';
@@ -11,15 +10,12 @@ import { useAppSelector, useAppDispatch } from '../../redux/store';
 import { filteredPosts } from '../../redux/selectors/filter';
 
 import { UserPostCard } from '../../entities/userPostCard';
-import { useAvergeRaiting } from '../../hooks/avergeRaiting';
-
-import type { post } from '../../types';
 
 import { activeFilter, activeFilterByType } from '../../redux/posts';
 import translate from '../../utils/i18/i18n';
 import { useTranslation } from 'react-i18next';
 
-export const UserPosts = () => {
+export const UserPosts = memo(() => {
   const dispatch = useAppDispatch();
   const filtered = useAppSelector(filteredPosts);
   const { t } = useTranslation();
@@ -85,4 +81,4 @@ export const UserPosts = () => {
       ))}
     </div>
   );
-};
+});

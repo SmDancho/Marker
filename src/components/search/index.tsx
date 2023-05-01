@@ -1,42 +1,48 @@
 import SearchIcon from '@mui/icons-material/Search';
 import TextField from '@mui/material/TextField';
-import IconButton from '@mui/material/IconButton';
-
-import { Link } from 'react-router-dom';
 
 import { search } from '../../redux/posts';
 
 import { useDebounce } from '../../hooks/debonce';
-import { useAppDispatch } from '../../redux/store';
+import { useAppDispatch, useAppSelector } from '../../redux/store';
 import { useState } from 'react';
-
-import translate from '../../utils/i18/i18n';
 import { useTranslation } from 'react-i18next';
 
+import translate from '../../utils/i18/i18n';
+
+import { useNavigate } from 'react-router-dom';
 export const Search = () => {
-  const { t } = useTranslation();
   const [searchRequest, setSearchRequest] = useState<string>('');
+
   const dispatch = useAppDispatch();
-  const debonced = useDebounce(searchRequest);
+  const debonced = useDebounce(searchRequest, 500);
+  const navigate = useNavigate();
+  const { t } = useTranslation();
+
+
   const handleSearch = () => {
     dispatch(search(debonced));
   };
 
   return (
-    <>
+    <div className="max-w-[600px]">
       <TextField
         label={translate.t('search')}
         type="search"
         variant="outlined"
         onChange={(e) => {
           setSearchRequest(e.target.value);
+          navigate('/search');
+        }}
+        className="w-full"
+        InputProps={{
+          endAdornment: <SearchIcon />,
+        }}
+        onKeyUp={(e) => {
+          e.key === 'Enter' ? handleSearch() : false;
         }}
       />
-      <Link to={'/search'}>
-        <IconButton type="button" aria-label="search" onClick={handleSearch}>
-          <SearchIcon />
-        </IconButton>
-      </Link>
-    </>
+      <span className="text-sm hidden lg:block">{translate.t('pressEnter')}</span>
+    </div>
   );
 };

@@ -21,5 +21,6 @@
   "create": "create",
   "warning": "Warning you are trying to delete post",
   "toDelete": "To delete post press delete",
-  "search":"search"
+  "search":"search",
+  "pressEnter":"press enter to search"
 }
