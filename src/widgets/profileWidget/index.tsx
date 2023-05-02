@@ -32,13 +32,12 @@ export const ProfileWidget: FC<props> = memo(
     const { allUsers } = useAppSelector((state) => state.auth);
     const { UserPost, status } = useAppSelector((state) => state.userPosts);
 
-
     useEffect(() => {
       dispatch(getUserPosts(_id as string));
-      dispatch(getUsers());
+      isAdmin && dispatch(getUsers());
     }, [status, _id]);
 
-    const userLikes = UserPost?.map((post) => post.likes);
+    const userLikes = useMemo(() => UserPost?.map((post) => post.likes), []);
 
     return (
       <div>
@@ -74,11 +73,7 @@ export const ProfileWidget: FC<props> = memo(
         <section className="mt-5">
           <div>
             <Link to={'/create'}>
-              <Button
-                variant="outlined"
-              >
-                {translate.t('createReview')}
-              </Button>
+              <Button variant="outlined">{translate.t('createReview')}</Button>
             </Link>
           </div>
         </section>
@@ -91,6 +86,7 @@ export const ProfileWidget: FC<props> = memo(
           {isAdmin &&
             allUsers
               ?.filter((users) => users.username !== username)
+              .sort((a, b) => (a.username < b.username ? -1 : 1))
               .map((user) => <AllUsers {...user} key={user._id} />)}
         </section>
       </div>

@@ -21,6 +21,12 @@
   "create": "create",
   "warning": "Warning you are trying to delete post",
   "toDelete": "To delete post press delete",
-  "search":"search",
-  "pressEnter":"press enter to search"
+  "search": "search",
+  "pressEnter": "press enter to search",
+  "unblock": " unblock",
+  "block": " block",
+  "makeUser": "make user",
+  "makeAdmin":"make admin",
+  "restore" :"restore",
+  "NothingFound" :"Nothing found"
 }

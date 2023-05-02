@@ -63,7 +63,6 @@ export const PostPageWidget: FC<post> = ({
     }
     rateValue && dispatch(addRaiting({ _id, value: rateValue as number }));
   };
-  console.log(likesState);
   return (
     <section className="p-5 lg:p-20 ">
       <div className="flex gap-10 flex-col ">

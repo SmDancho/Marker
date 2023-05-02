@@ -175,6 +175,7 @@ export const getAllPosts = createAsyncThunk(
     return data;
   }
 );
+
 export const getPostById = createAsyncThunk(
   'postSlice/PostBuId',
   async (_id: string) => {
@@ -183,6 +184,7 @@ export const getPostById = createAsyncThunk(
         postID: _id,
       })
       .then((response) => {
+    
         return response.data;
       });
 
@@ -295,6 +297,10 @@ export const postSlice = createSlice({
       state.status = action.payload.message;
       state.error = action.payload.message;
     });
+    builder.addCase(search.rejected, (state, action) => {
+      state.isLoading = false;
+      state.error = action.error.message as string;
+    });
     builder.addCase(search.pending, (state) => {
       state.isLoading = true;
     });
@@ -304,7 +310,10 @@ export const postSlice = createSlice({
       state.status = action.payload.message;
       state.searchedPosts = action.payload;
     });
-
+    builder.addCase(getUserPosts.rejected, (state, action) => {
+      state.isLoading = false;
+      state.error = action.error.message as string;
+    });
     builder.addCase(getUserPosts.pending, (state) => {
       state.isLoading = true;
     });
@@ -315,8 +324,11 @@ export const postSlice = createSlice({
 
       state.UserPost = action.payload;
     });
-
-    builder.addCase(deletePost.pending, (state, action) => {
+    builder.addCase(deletePost.rejected, (state, action) => {
+      state.isLoading = false;
+      state.error = action.error.message as string;
+    });
+    builder.addCase(deletePost.pending, (state) => {
       state.isLoading = true;
     });
 
@@ -325,6 +337,10 @@ export const postSlice = createSlice({
       state.status = action.payload.message;
     });
 
+    builder.addCase(getAllPosts.rejected, (state, action) => {
+      state.isLoading = false;
+      state.error = action.error.message as string;
+    });
     builder.addCase(getAllPosts.pending, (state, action) => {
       state.isLoading = true;
     });
@@ -335,6 +351,10 @@ export const postSlice = createSlice({
       state.posts = action.payload;
     });
 
+    builder.addCase(getPostById.rejected, (state, action) => {
+      state.isLoading = false;
+      state.error = action.error.message as string;
+    });
     builder.addCase(getPostById.pending, (state, action) => {
       state.isLoading = true;
     });
@@ -345,6 +365,10 @@ export const postSlice = createSlice({
       state.specificPost = action.payload;
     });
 
+    builder.addCase(likePost.rejected, (state, action) => {
+      state.isLoading = false;
+      state.error = action.error.message as string;
+    });
     builder.addCase(likePost.pending, (state, action) => {
       state.isLoading = true;
     });
@@ -353,7 +377,10 @@ export const postSlice = createSlice({
       state.isLoading = false;
       state.status = action.payload.message;
     });
-
+    builder.addCase(addComment.rejected, (state, action) => {
+      state.isLoading = false;
+      state.error = action.error.message as string;
+    });
     builder.addCase(addComment.pending, (state) => {
       state.isLoading = true;
     });
@@ -363,6 +390,10 @@ export const postSlice = createSlice({
       state.status = action.payload.message;
     });
 
+    builder.addCase(addRaiting.rejected, (state, action) => {
+      state.isLoading = false;
+      state.error = action.error.message as string;
+    });
     builder.addCase(addRaiting.pending, (state) => {
       state.isLoading = true;
     });
@@ -371,12 +402,23 @@ export const postSlice = createSlice({
       state.isLoading = false;
       state.status = action.payload.message;
     });
+    builder.addCase(getTags.rejected, (state, action) => {
+      state.isLoading = false;
+      state.error = action.error.message as string;
+    });
+    builder.addCase(getTags.pending, (state) => {
+      state.isLoading = true;
+    });
     builder.addCase(getTags.fulfilled, (state, action) => {
       state.isLoading = false;
       state.allTags = action.payload;
       state.status = action.payload.message;
     });
-    builder.addCase(updatePost.pending, (state, action) => {
+    builder.addCase(updatePost.rejected, (state, action) => {
+      state.isLoading = false;
+      state.error = action.error.message as string;
+    });
+    builder.addCase(updatePost.pending, (state) => {
       state.isLoading = true;
     });
     builder.addCase(updatePost.fulfilled, (state, action) => {
