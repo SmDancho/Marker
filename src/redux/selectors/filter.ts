@@ -11,17 +11,17 @@ export const allPosts = (state: RootState) => state.userPosts.posts;
 
 const filterFunction = (type: string, filter: string, data: post[]) => {
   const byLikes = data
-    .filter((item: post) => (filter === 'All' ? item : item.group === filter))
+    .filter((item: post) => (filter === 'All' ? item : item?.group === filter))
     .sort((a: post, b: post) => {
       return b.likes.length - a.likes.length;
     });
 
   const byUserRate = data
-    .filter((item: post) => (filter === 'All' ? item : item.group === filter))
+    .filter((item: post) => (filter === 'All' ? item : item?.group === filter))
     .sort((a: post, b: post) => b.authorRaiting - a.authorRaiting);
 
   const byAvgRating = data
-    .filter((item: post) => (filter === 'All' ? item : item.group === filter))
+    .filter((item: post) => (filter === 'All' ? item : item?.group === filter))
     .sort(
       (a: post, b: post) =>
         useAvergeRaiting(b.raiting) - useAvergeRaiting(a.raiting)
