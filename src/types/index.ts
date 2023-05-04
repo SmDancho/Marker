@@ -22,7 +22,7 @@ export interface post {
   author: string;
   title: string;
   topic: string;
-  image: string;
+  image: string[];
   tags: string[];
   text: string;
   raiting: raiting[];

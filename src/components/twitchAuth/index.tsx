@@ -44,6 +44,13 @@ export const TwitchAuthComponent = () => {
         scopse: 'user:edit',
       })
       .then((response) => setData(response.data));
+
+    if (data) {
+      validateToken();
+    }
+    if (user) {
+      dispatch(twitchAuth(user as twitchUser));
+    }
   };
   const validateToken = () => {
     axios
@@ -54,16 +61,11 @@ export const TwitchAuthComponent = () => {
       })
       .then((response) => setUser(response.data));
   };
-  useEffect(() => {
-    handleAuth();
-    if (data) {
-      validateToken();
-    }
-  }, [data]);
 
   useEffect(() => {
-    dispatch(twitchAuth(user as twitchUser));
-  }, [user]);
+    handleAuth();
+  }, [data, user]);
+
   return (
     <>
       <button

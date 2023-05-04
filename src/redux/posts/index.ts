@@ -8,7 +8,7 @@ interface postData {
   userId?: string;
   title: string;
   topic: string;
-  image?: File;
+  image?: File[];
   text: string;
   group?: string;
   tags?: string[];
@@ -53,6 +53,7 @@ export const addpost = createAsyncThunk(
     authorRaiting,
     userId,
   }: postData) => {
+    console.log('red', image)
     const data = await instance
       .post(
         '/post/add',

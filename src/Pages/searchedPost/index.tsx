@@ -3,11 +3,13 @@ import { PostCard } from '../../entities/postCard';
 
 import translate from '../../utils/i18/i18n';
 import { useTranslation } from 'react-i18next';
+
+
 const SearchedPostsPage = () => {
   const { searchedPosts } = useAppSelector((state) => state.userPosts);
   const isRequestSuccess = searchedPosts.length ? true : false;
   const { t } = useTranslation();
-  console.log(isRequestSuccess);
+
   return (
     <div className=" flex flex-col justify-between">
       {isRequestSuccess ? (

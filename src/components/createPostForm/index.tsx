@@ -11,7 +11,6 @@ import {
 
 import { LoadingButton } from '@mui/lab';
 import { FileUploader } from 'react-drag-drop-files';
-import SimpleMDE from 'react-simplemde-editor';
 
 import { addpost, getTags } from '../../redux/posts';
 
@@ -22,20 +21,20 @@ import { useNavigate } from 'react-router-dom';
 
 import translate from '../../utils/i18/i18n';
 
-import 'easymde/dist/easymde.min.css';
+import ReactQuill from 'react-quill';
+
+import 'react-quill/dist/quill.snow.css';
+
 const PostForm = () => {
-  const fileTypes = ['JPG', 'PNG', 'GIF'];
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
 
-  const { isLoading, allTags, error, status } = useAppSelector(
-    (state) => state.userPosts
-  );
-  const { user, viewUser } = useAppSelector((state) => state.auth);
+  const fileTypes = ['JPG', 'PNG', 'GIF'];
+  const delay = 1000;
 
   const [title, setTitle] = useState<string>('');
   const [topic, setTopic] = useState<string>('');
-  const [image, setImg] = useState<File>();
+  const [image, setImg] = useState<File[]>([]);
   const [text, setText] = useState<string>('');
   const [group, setGroup] = useState<string>('');
 
@@ -45,11 +44,20 @@ const PostForm = () => {
   const [authorRaiting, setAuthorRaiting] = useState<number>(0);
 
   const deboncedValue: string = useDebounce(tagString);
+
+  const { isLoading, allTags, error, status } = useAppSelector(
+    (state) => state.userPosts
+  );
+  const { user, viewUser } = useAppSelector((state) => state.auth);
+
   const { t } = useTranslation();
 
   useEffect(() => {
     dispatch(getTags());
     if (status === 'Created successfully') {
+      navigate('/Profile');
+    }
+    if (!user) {
       navigate('/Profile');
     }
   }, [status]);
@@ -72,17 +80,28 @@ const PostForm = () => {
   const tagsOption: string[] = [...allTags];
   tagsOption.push(deboncedValue);
 
-  const textOptions = useMemo(() => {
-    return {
-      spellChecker: false,
-      placeholder: translate.t('review'),
-      autosave: {
-        uniqueId: 'demo',
-        enabled: true,
-        delay: 1000,
-      },
-    };
-  }, []);
+
+  const modules = {
+    toolbar: [
+      ['bold', 'italic', 'underline', 'strike'], // toggled buttons
+      ['blockquote', 'code-block'],
+
+      [{ header: 1 }, { header: 2 }], // custom button values
+      [{ list: 'ordered' }, { list: 'bullet' }],
+      [{ script: 'sub' }, { script: 'super' }], // superscript/subscript
+      [{ indent: '-1' }, { indent: '+1' }], // outdent/indent
+      [{ direction: 'rtl' }], // text direction
+
+      [{ size: ['small', false, 'large', 'huge'] }], // custom dropdown
+      [{ header: [1, 2, 3, 4, 5, 6, false] }],
+
+      [{ color: [] }, { background: [] }], // dropdown with defaults from theme
+      [{ font: [] }],
+      [{ align: [] }],
+
+      ['clean'],
+    ],
+  };
 
   return (
     <>
@@ -166,24 +185,23 @@ const PostForm = () => {
           <MenuItem value={'Movies'}>Movies</MenuItem>
         </Select>
 
-        <SimpleMDE
-          value={text}
-          options={textOptions}
-          onChange={(text: string) => {
-            setText(text);
-          }}
-        />
+        <div className="h-[400px]">
+          <ReactQuill
+            theme="snow"
+            value={text}
+            modules={modules}
+            onChange={(text) => setText(text)}
+            className="h-[350px]"
+          />
+        </div>
 
         <div className="flex gap-5 ">
-          {image ? (
-            <p className="flex items-center ">{image.name}</p>
-          ) : (
-            <FileUploader
-              handleChange={(file: File) => setImg(file)}
-              name="file"
-              types={fileTypes}
-            />
-          )}
+          <FileUploader
+            handleChange={(file: File) => setImg([...image, file])}
+            name="file"
+            types={fileTypes}
+          />
+          {image && image.map((img) => <p>{img.name}</p>)}
         </div>
         <LoadingButton
           loading={isLoading}

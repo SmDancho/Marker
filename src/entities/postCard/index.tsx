@@ -9,7 +9,7 @@ interface props {
   title: string;
   topic: string;
   tags: string[];
-  image: string;
+  image: string[];
   text: string;
   raiting: raiting[];
   _id: string;
@@ -30,7 +30,7 @@ export const PostCard: FC<props> = ({
       <div className=" flex mt-10 justify-between m-auto flex-col rounded-lg cursor-pointer lg:flex-row ">
         <div className=" rounded-lg max-w-[500px]">
           <img
-            src={`${image}`}
+            src={`${image[0]}`}
             alt=""
             className="block rounded-l-lg max-w-full"
           />

@@ -4,6 +4,7 @@ import { CircularProgress } from '@mui/material';
 import { MainPage } from '../Pages/Main';
 
 import { Layout } from '../layout';
+
 const ProfilePage = lazy(() => import('../Pages/profile'));
 const PostPage = lazy(() => import('../Pages/postPage'));
 const SearchedPostsPage = lazy(() => import('../Pages/searchedPost'));

@@ -28,5 +28,6 @@
   "makeUser": "make user",
   "makeAdmin":"make admin",
   "restore" :"restore",
-  "NothingFound" :"Nothing found"
+  "NothingFound" :"Nothing found",
+  "comment" :"comment"
 }
