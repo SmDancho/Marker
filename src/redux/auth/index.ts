@@ -27,7 +27,6 @@ const initialState: authState = {
   status: null,
   allUsers: [],
   isOpenConfirm: false,
- 
 };
 
 export const googleAuth = createAsyncThunk(
@@ -237,6 +236,9 @@ export const authSlice = createSlice({
       state.status = action.payload.message;
       state.user = action.payload.user;
     });
+    builder.addCase(getUserByID.rejected, (state) => {
+      state.isLoading = false;
+    });
     builder.addCase(getUserByID.pending, (state) => {
       state.isLoading = true;
     });
@@ -245,6 +247,9 @@ export const authSlice = createSlice({
       state.isLoading = false;
       state.status = action.payload.message;
       state.viewUser = action.payload;
+    });
+    builder.addCase(getUsers.rejected, (state) => {
+      state.isLoading = false;
     });
     builder.addCase(getUsers.pending, (state) => {
       state.isLoading = true;
@@ -255,6 +260,9 @@ export const authSlice = createSlice({
       state.allUsers = action.payload;
     });
 
+    builder.addCase(googleAuth.rejected, (state) => {
+      state.isLoading = false;
+    });
     builder.addCase(googleAuth.pending, (state) => {
       state.isLoading = true;
     });
@@ -266,6 +274,9 @@ export const authSlice = createSlice({
       state.user = action.payload.user;
     });
 
+    builder.addCase(registerUser.rejected, (state) => {
+      state.isLoading = false;
+    });
     builder.addCase(registerUser.pending, (state) => {
       state.isLoading = true;
     });
@@ -276,7 +287,9 @@ export const authSlice = createSlice({
       state.status = action.payload.message;
       state.user = action.payload.user;
     });
-
+    builder.addCase(loginUser.rejected, (state) => {
+      state.isLoading = false;
+    });
     builder.addCase(loginUser.pending, (state) => {
       state.isLoading = true;
     });

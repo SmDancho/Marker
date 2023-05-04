@@ -31,8 +31,11 @@ export const AllUsers: FC<props> = ({ username, _id, roles }) => {
   const [blockStatus, setBlockStatus] = useState<boolean>(
     checkUSerRoel('BLOCKED', roles)
   );
-  const [adminStatus, setAdminStatusStatus] = useState<boolean>(
+  const [adminStatus, setAdminStatus] = useState<boolean>(
     checkUSerRoel('ADMIN', roles)
+  );
+  const [deleteStatus, setDeleteStatus] = useState<boolean>(
+    checkUSerRoel('DELETED', roles)
   );
 
   const handleBlock = () => {
@@ -41,10 +44,11 @@ export const AllUsers: FC<props> = ({ username, _id, roles }) => {
   };
   const handleDeleteUser = () => {
     dispatch(deleteUser(_id));
+    setDeleteStatus((prev) => !prev);
   };
   const handleAdmin = () => {
     dispatch(makeAdmin(_id));
-    setAdminStatusStatus((prev) => !prev);
+    setAdminStatus((prev) => !prev);
   };
   useEffect(() => {
     dispatch(getUsers());
@@ -52,39 +56,52 @@ export const AllUsers: FC<props> = ({ username, _id, roles }) => {
   return (
     <>
       {toDelete && <ConfirmDiolg deleteFunction={handleDeleteUser} />}
-
+  
       <div className="flex items-center shadow-xl  justify-between  mt-5 rounded-lg p-5 hover:bg-[#98c5f380] transition-all">
         {username}
         <div className="flex gap-2 items-center ">
           <Link to={`/user/${_id}`}>
             <Button variant="outlined">{translate.t('userProfile')}</Button>
           </Link>
-          <Button
-            variant="outlined"
-            color="error"
-            onClick={() => {
-              dispatch(openConfirm(true));
-              setTodelete((prev) => !prev);
-            }}
-          >
-            delete user
-          </Button>
+          {deleteStatus ? (
+            <Button
+              variant="outlined"
+              onClick={() => {
+                dispatch(openConfirm(true));
+                setTodelete((prev) => !prev);
+              }}
+            >
+             {translate.t("restore")}
+            </Button>
+          ) : (
+            <Button
+              variant="outlined"
+              color="error"
+              onClick={() => {
+                dispatch(openConfirm(true));
+                setTodelete((prev) => !prev);
+              }}
+            >
+              {translate.t('delete')}
+            </Button>
+          )}
+
           {blockStatus ? (
             <Button variant="outlined" onClick={handleBlock}>
-              unblock
+              {translate.t('unblock')}
             </Button>
           ) : (
             <Button variant="outlined" color="error" onClick={handleBlock}>
-              Block
+              {translate.t('block')}
             </Button>
           )}
           {adminStatus ? (
             <Button variant="outlined" onClick={handleAdmin}>
-              make user
+              {translate.t('makeUser')}
             </Button>
           ) : (
             <Button variant="outlined" onClick={handleAdmin}>
-              make admin
+              {translate.t('makeAdmin')}
             </Button>
           )}
         </div>

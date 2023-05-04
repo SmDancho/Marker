@@ -1,20 +1,30 @@
-import { useMemo, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useAppDispatch, useAppSelector } from '../../redux/store';
+import { useParams } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 
+import { Select, MenuItem, Alert, TextField } from '@mui/material';
 import { getPostById } from '../../redux/posts';
 import { updatePost } from '../../redux/posts';
-import Alert from '@mui/material/Alert';
-import LoadingButton from '@mui/lab/LoadingButton';
-import TextField from '@mui/material/TextField';
-import SimpleMDE from 'react-simplemde-editor';
-import { useParams } from 'react-router-dom';
 
- const UpdateForm = () => {
+import LoadingButton from '@mui/lab/LoadingButton';
+
+import ReactQuill from 'react-quill';
+
+import translate from '../../utils/i18/i18n';
+import { modules } from '../../utils/cfgForTextEditor';
+
+import 'react-quill/dist/quill.snow.css';
+const UpdateForm = () => {
+  const navigate = useNavigate();
+  const { t } = useTranslation();
   const { specificPost, status, isLoading } = useAppSelector(
     (state) => state.userPosts
   );
+  const { user } = useAppSelector((state) => state.auth);
   const dispatch = useAppDispatch();
-  const [updatedText, setUpdateText] = useState(specificPost?.text);
+  const [text, setText] = useState(specificPost?.text);
   const [updatedTitle, setUpdateTitle] = useState(specificPost?.title);
   const [updatedTopic, setUpdateTopic] = useState(specificPost?.topic);
   const [updatedRaiting, setUpdateRaiting] = useState<number>(
@@ -22,23 +32,15 @@ import { useParams } from 'react-router-dom';
   );
 
   const { id } = useParams();
-  const textOptions = useMemo(() => {
-    return {
-      spellChecker: false,
-      placeholder: 'Review',
-      autosave: {
-        uniqueId: 'demo',
-        enabled: true,
-        delay: 1000,
-      },
-    };
-  }, []);
 
   useEffect(() => {
+    if (!user) {
+      navigate('/Profile');
+    }
+
     dispatch(getPostById(id as string));
   }, []);
 
-  console.log(status);
   return (
     <>
       {status && (
@@ -70,22 +72,33 @@ import { useParams } from 'react-router-dom';
               setUpdateTopic(e.target.value);
             }}
           />
-          <TextField
-            label="Author raiting"
+          <Select
+            labelId="your-mark"
             defaultValue={specificPost?.authorRaiting}
-            variant="outlined"
-            type="number"
-            onChange={(e: any) => {
-              setUpdateRaiting(e.target.value);
-            }}
-          />
-          <SimpleMDE
-            value={specificPost?.text}
-            options={textOptions}
-            onChange={(text: string) => {
-              setUpdateText(text);
-            }}
-          />
+            value={updatedRaiting}
+            onChange={(e) => setUpdateRaiting(e.target.value as number)}
+          >
+            <MenuItem value={0}>0</MenuItem>
+            <MenuItem value={1}>1</MenuItem>
+            <MenuItem value={2}>2</MenuItem>
+            <MenuItem value={3}>3</MenuItem>
+            <MenuItem value={4}>4</MenuItem>
+            <MenuItem value={5}>5</MenuItem>
+            <MenuItem value={6}>6</MenuItem>
+            <MenuItem value={7}>7</MenuItem>
+            <MenuItem value={8}>8</MenuItem>
+            <MenuItem value={9}>9</MenuItem>
+            <MenuItem value={10}>10</MenuItem>
+          </Select>
+          <div className="h-[400px]">
+            <ReactQuill
+              theme="snow"
+              value={text}
+              modules={modules}
+              onChange={(text) => setText(text)}
+              className="h-[350px]"
+            />
+          </div>
 
           <LoadingButton
             loading={isLoading}
@@ -94,7 +107,7 @@ import { useParams } from 'react-router-dom';
               dispatch(
                 updatePost({
                   postId: id as string,
-                  text: updatedText as string,
+                  text: text as string,
                   title: updatedTitle as string,
                   topic: updatedTopic as string,
                   authorRaiting: updatedRaiting,
@@ -102,11 +115,11 @@ import { useParams } from 'react-router-dom';
               );
             }}
           >
-            Update
+            {translate.t('update')}
           </LoadingButton>
         </form>
       )}
     </>
   );
 };
-export default UpdateForm
+export default UpdateForm;

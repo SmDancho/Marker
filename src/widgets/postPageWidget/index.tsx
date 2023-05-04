@@ -1,9 +1,9 @@
-import { useState, FC, useCallback, useMemo } from 'react';
+import { useState, FC } from 'react';
 import { useNavigate } from 'react-router-dom';
 import ReactMarkdown from 'react-markdown';
 
 import { useAppDispatch, useAppSelector } from '../../redux/store';
-import { likePost, addComment, addRaiting } from '../../redux/posts';
+import { likePost, addComment, addRaiting, search } from '../../redux/posts';
 
 import ThumbUpAltIcon from '@mui/icons-material/ThumbUpAlt';
 import ThumbUpOutlinedIcon from '@mui/icons-material/ThumbUpOutlined';
@@ -14,8 +14,10 @@ import { Rating, Avatar, TextField, IconButton } from '@mui/material';
 import InputAdornment from '@mui/material/InputAdornment';
 import { useAvergeRaiting } from '../../hooks/avergeRaiting';
 
-import type { comment, raiting, post } from '../../types';
+import type { post } from '../../types';
 
+import translate from '../../utils/i18/i18n';
+import { useTranslation } from 'react-i18next';
 export const PostPageWidget: FC<post> = ({
   tags,
   author,
@@ -37,6 +39,7 @@ export const PostPageWidget: FC<post> = ({
 
   const [likesState, setLikes] = useState<string[]>(likes as string[]);
 
+  const { t } = useTranslation();
   const avergeRaiting = useAvergeRaiting(raiting);
   const isLiked = likesState?.includes(user?._id as string);
 
@@ -63,7 +66,10 @@ export const PostPageWidget: FC<post> = ({
     }
     rateValue && dispatch(addRaiting({ _id, value: rateValue as number }));
   };
-  console.log(likesState);
+  const searchBytag = (tag: string) => {
+    dispatch(search(tag));
+  };
+  console.log(text);
   return (
     <section className="p-5 lg:p-20 ">
       <div className="flex gap-10 flex-col ">
@@ -83,18 +89,36 @@ export const PostPageWidget: FC<post> = ({
         <div className="flex flex-col gap-2">
           <ul className="flex gap-2">
             {tags?.map((tag, index) => (
-              <li key={index}>#{tag}</li>
+              <IconButton className="text-sm p-2">
+                <li
+                  key={index}
+                  className="cursor-pointer text-sm"
+                  onClick={() => {
+                    navigate('/search');
+                    searchBytag(tag);
+                  }}
+                >
+                  #{tag}
+                </li>
+              </IconButton>
             ))}
           </ul>
 
           <div>author: {author}</div>
           <div>author raiting : {authorRaiting} / 10</div>
           <div>
-            <img src={`${image}`} alt="image" className="block rounded-lg" />
+            {image.map((item) => (
+              <div>
+                <img
+                  src={`${item}`}
+                  alt="image"
+                  className="block rounded-lg mt-10"
+                />
+              </div>
+            ))}
+            <ReactMarkdown children={text as string} />
           </div>
         </div>
-
-        <ReactMarkdown children={text as string} />
 
         <div>
           <div
@@ -121,7 +145,7 @@ export const PostPageWidget: FC<post> = ({
             <div className="flex flex-col justify-between items-center w-full gap-2 lg:flex-row">
               <TextField
                 value={commentText}
-                label="comment"
+                label={translate.t('comment')}
                 variant="outlined"
                 className=" w-full"
                 onChange={(e: any) => {
