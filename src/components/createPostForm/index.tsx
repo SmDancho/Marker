@@ -30,7 +30,7 @@ const PostForm = () => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
 
-  const fileTypes = ['JPG', 'PNG', 'GIF'];
+  const fileTypes = ['JPG', 'PNG', 'GIF', 'WEBP'];
 
   const [title, setTitle] = useState<string>('');
   const [topic, setTopic] = useState<string>('');
@@ -82,18 +82,17 @@ const PostForm = () => {
 
   return (
     <>
-      {error && (
+      {error === 'fill all required fields' && (
         <Alert severity="error" className="mt-10">
           {error}
         </Alert>
       )}
       <form className=" top-0 right-0 bottom-0 left-0 w-full mt-10 mb-10 flex flex-col justify-center m-auto gap-5 ">
-        <div className="flex justify-between gap-2">
+        <div className="flex gap-2">
           <TextField
             className="w-full"
             label={translate.t('title')}
             variant="outlined"
-            helperText="Title is required"
             onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
               setTitle(e.target.value);
             }}
@@ -101,7 +100,6 @@ const PostForm = () => {
           <TextField
             className="w-full"
             label={translate.t('topic')}
-            helperText="Title is required"
             variant="outlined"
             onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
               setTopic(e.target.value);
@@ -158,22 +156,19 @@ const PostForm = () => {
           value={group}
           onChange={(e) => setGroup(e.target.value as string)}
         >
-          <MenuItem value={'Games'}>Games</MenuItem>
-          <MenuItem value={'Books'}>Books</MenuItem>
-          <MenuItem value={'Movies'}>Movies</MenuItem>
+          <MenuItem value={'Games'}>{translate.t('games')}</MenuItem>
+          <MenuItem value={'Books'}>{translate.t('books')}</MenuItem>
+          <MenuItem value={'Movies'}>{translate.t('movies')}</MenuItem>
         </Select>
 
-        <div className="h-[400px]">
-          <ReactQuill
-            theme="snow"
-            value={text}
-            modules={modules}
-            onChange={(text) => setText(text)}
-            className="h-[350px]"
-          />
-        </div>
-
-        <div className="flex gap-5 ">
+        <ReactQuill
+          value={text}
+          modules={modules}
+          onChange={(text) => setText(text)}
+          className="max-h-[340px]"
+        />
+        <div className="flex gap-5 flex-col">
+          <span>{translate.t("preview")}</span>
           <FileUploader
             handleChange={(file: File) => setImg([...image, file])}
             name="file"

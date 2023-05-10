@@ -20,7 +20,15 @@ export const Footer = () => {
           </IconButton>
         </a>
       </div>
-      <div>developed by SmDancho</div>
+      <div>
+        developed by{' '}
+        <a
+          href="https://www.linkedin.com/in/danil-tereshenko-2301a4242/"
+          target="__blank"
+        >
+          Danil
+        </a>
+      </div>
       <div>
         <a href="mailto:dantereshenko69@gmail.com">dantereshenko69@gmail.com</a>
       </div>
