@@ -1,4 +1,4 @@
-import { useState, useMemo, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 
 import {
   TextField,
@@ -31,7 +31,6 @@ const PostForm = () => {
   const navigate = useNavigate();
 
   const fileTypes = ['JPG', 'PNG', 'GIF'];
-  const delay = 1000;
 
   const [title, setTitle] = useState<string>('');
   const [topic, setTopic] = useState<string>('');
@@ -77,8 +76,8 @@ const PostForm = () => {
       })
     );
   };
-
-  const tagsOption: string[] = [...allTags];
+  const dleteDuplicates = new Set(allTags);
+  const tagsOption: string[] = [...dleteDuplicates];
   tagsOption.push(deboncedValue);
 
   return (
