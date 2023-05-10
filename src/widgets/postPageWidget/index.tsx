@@ -107,16 +107,28 @@ export const PostPageWidget: FC<post> = ({
           <div>author: {author}</div>
           <div>author raiting : {authorRaiting} / 10</div>
           <div>
-            {image.map((item) => (
-              <div>
-                <img
-                  src={`${item}`}
-                  alt="image"
-                  className="block rounded-lg mt-10"
-                />
-              </div>
-            ))}
-            <ReactMarkdown children={text as string} />
+            {
+              <img
+                src={`${image[0]}`}
+                alt="image"
+                className="rounded-lg mt-10 mb-20 w-[300px] h-[450px] object-cover"
+              />
+            }
+            <span>{translate.t("img")}</span>
+            <div className="flex gap-2  w-full ">
+              {image
+                .filter((img) => img !== image[0])
+                .map((item) => (
+                  <div>
+                    <img
+                      src={`${item}`}
+                      alt="image"
+                      className=" block w-[150px] h-[150px] rounded-lg mt-10 mb-20 object-cover"
+                    />
+                  </div>
+                ))}
+            </div>
+            <ReactMarkdown children={text} />
           </div>
         </div>
 
@@ -141,13 +153,13 @@ export const PostPageWidget: FC<post> = ({
 
         <div>
           <div className="flex gap-2 items-center">
-            <Avatar alt={`${user?.username}`} src="123" />
+            <Avatar alt={`${user?.username}`} />
             <div className="flex flex-col justify-between items-center w-full gap-2 lg:flex-row">
               <TextField
                 value={commentText}
                 label={translate.t('comment')}
                 variant="outlined"
-                className=" w-full"
+                className="w-full"
                 onChange={(e: any) => {
                   setCommentText(e.target.value);
                 }}
