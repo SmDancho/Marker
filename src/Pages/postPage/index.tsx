@@ -6,17 +6,20 @@ import { getme } from '../../redux/auth';
 import { getPostById } from '../../redux/posts';
 
 const PostPage = () => {
-  const { id } = useParams();
   const dispatch = useAppDispatch();
-  const { specificPost, status } = useAppSelector((state) => state.userPosts);
+  const { id } = useParams();
+
+  const { specificPost } = useAppSelector((state) => state.userPosts);
+
   useEffect(() => {
     dispatch(getPostById(id as string));
+    dispatch(getme())
     const interval = setInterval(() => {
       dispatch(getPostById(id as string));
     }, 6000);
-    dispatch(getme());
+
     return () => clearInterval(interval);
-  }, [status]);
+  }, []);
 
   return specificPost && <PostPageWidget {...specificPost} />;
 };

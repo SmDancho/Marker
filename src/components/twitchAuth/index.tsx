@@ -1,4 +1,4 @@
-import { useState, useEffect, useMemo } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import axios from 'axios';
 import { twitchAuth } from '../../redux/auth';
 
@@ -24,7 +24,7 @@ interface tokenData {
 export const TwitchAuthComponent = () => {
   const { t } = useTranslation();
   const dispatch = useAppDispatch();
-  const [data, setData] = useState<tokenData | null>(null);
+
   const [user, setUser] = useState<twitchUser | null>(null);
 
   const searchParams = new URLSearchParams(window.location.search);
@@ -43,16 +43,13 @@ export const TwitchAuthComponent = () => {
             : import.meta.env.VITE_TWITCH_REDIRECT_PROD,
         scopse: 'user:edit',
       })
-      .then((response) => setData(response.data));
-
-    if (data) {
-      validateToken();
-    }
+      .then((response) => validateToken(response.data));
     if (user) {
       dispatch(twitchAuth(user as twitchUser));
     }
   };
-  const validateToken = () => {
+
+  const validateToken = (data: tokenData) => {
     axios
       .get('https://id.twitch.tv/oauth2/validate', {
         headers: {
@@ -63,15 +60,14 @@ export const TwitchAuthComponent = () => {
   };
 
   useEffect(() => {
-    handleAuth();
-  }, [data, user]);
+    if (code) {
+      handleAuth();
+    }
+  }, [user]);
 
   return (
     <>
-      <button
-        onClick={handleAuth}
-        className="bg-[#6441a5] w-[225px] h-[40px] rounded-sm  flex items-center gap-5 justify-center"
-      >
+      <button className="bg-[#6441a5] w-[225px] h-[40px] rounded-sm  flex items-center gap-5 justify-center">
         <a
           href={`https://id.twitch.tv/oauth2/authorize?response_type=code&client_id=${
             import.meta.env.VITE_TWITCH_ID
