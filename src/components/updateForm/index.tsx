@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback ,useMemo} from 'react';
 import { useAppDispatch, useAppSelector } from '../../redux/store';
 import { useParams } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
@@ -10,13 +10,13 @@ import { updatePost } from '../../redux/posts';
 
 import LoadingButton from '@mui/lab/LoadingButton';
 
-import ReactQuill from 'react-quill';
-
 import translate from '../../utils/i18/i18n';
-import { modules } from '../../utils/cfgForTextEditor';
 
-import 'react-quill/dist/quill.snow.css';
+import SimpleMDE from 'react-simplemde-editor';
+import 'easymde/dist/easymde.min.css';
+
 const UpdateForm = () => {
+  const { id } = useParams();
   const navigate = useNavigate();
   const { t } = useTranslation();
   const { specificPost, status, isLoading } = useAppSelector(
@@ -31,7 +31,22 @@ const UpdateForm = () => {
     specificPost?.authorRaiting as number
   );
 
-  const { id } = useParams();
+  const delay = 1000;
+  const changeText = useCallback((value: string) => {
+    setText(value);
+  }, []);
+
+  const textEditorOptions = useMemo(() => {
+    return {
+      autofocus: true,
+      spellChecker: false,
+      autosave: {
+        enabled: true,
+        uniqueId: 'demo',
+        delay,
+      },
+    };
+  }, [delay]);
 
   useEffect(() => {
     if (!user) {
@@ -91,12 +106,10 @@ const UpdateForm = () => {
             <MenuItem value={10}>10</MenuItem>
           </Select>
           <div className="h-[400px]">
-            <ReactQuill
-              theme="snow"
+            <SimpleMDE
               value={text}
-              modules={modules}
-              onChange={(text) => setText(text)}
-              className="h-[350px]"
+              onChange={changeText}
+              options={textEditorOptions}
             />
           </div>
 

@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo, useCallback } from 'react';
 
 import {
   TextField,
@@ -21,10 +21,8 @@ import { useNavigate } from 'react-router-dom';
 
 import translate from '../../utils/i18/i18n';
 
-import ReactQuill from 'react-quill';
-import { modules } from '../../utils/cfgForTextEditor';
-
-import 'react-quill/dist/quill.snow.css';
+import SimpleMDE from 'react-simplemde-editor';
+import 'easymde/dist/easymde.min.css';
 
 const PostForm = () => {
   const dispatch = useAppDispatch();
@@ -76,6 +74,24 @@ const PostForm = () => {
       })
     );
   };
+
+  const autosavedValue = localStorage.getItem(`smde_demo`) || '';
+  const delay = 1000
+  const changeText = useCallback((value: string) => {
+    setText(value);
+  }, []);
+  const textEditorOptions = useMemo(() => {
+    return {
+      autofocus: true,
+      spellChecker: false,
+      autosave: {
+        enabled: true,
+        uniqueId: 'demo',
+        delay,
+      },
+    };
+  }, [delay]);
+
   const dleteDuplicates = new Set(allTags);
   const tagsOption: string[] = [...dleteDuplicates];
   tagsOption.push(deboncedValue);
@@ -161,14 +177,16 @@ const PostForm = () => {
           <MenuItem value={'Movies'}>{translate.t('movies')}</MenuItem>
         </Select>
 
-        <ReactQuill
-          value={text}
-          modules={modules}
-          onChange={(text) => setText(text)}
-          className="max-h-[340px]"
-        />
+        <div>
+          <SimpleMDE
+            value={autosavedValue}
+            onChange={changeText}
+            options={textEditorOptions}
+          />
+        </div>
+
         <div className="flex gap-5 flex-col">
-          <span>{translate.t("preview")}</span>
+          <span>{translate.t('preview')}</span>
           <FileUploader
             handleChange={(file: File) => setImg([...image, file])}
             name="file"
