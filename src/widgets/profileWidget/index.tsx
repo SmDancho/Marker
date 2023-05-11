@@ -49,7 +49,7 @@ export const ProfileWidget: FC<props> = ({
     <div>
       <div className="flex justify-between mt-5 items-center">
         <div className="flex items-center gap-2">
-          <Avatar alt={`${username}`} src="/static/images/avatar/1.jpg" />
+          <Avatar alt={`${username}`} />
           <div>
             <div className="flex gap-3">
               <div className="font-bold">{username}</div>

@@ -5,6 +5,7 @@ import ReactMarkdown from 'react-markdown';
 import { useAppDispatch, useAppSelector } from '../../redux/store';
 import { likePost, addComment, addRaiting, search } from '../../redux/posts';
 
+
 import ThumbUpAltIcon from '@mui/icons-material/ThumbUpAlt';
 import ThumbUpOutlinedIcon from '@mui/icons-material/ThumbUpOutlined';
 import SendIcon from '@mui/icons-material/Send';
@@ -18,6 +19,7 @@ import type { post } from '../../types';
 
 import translate from '../../utils/i18/i18n';
 import { useTranslation } from 'react-i18next';
+
 export const PostPageWidget: FC<post> = ({
   tags,
   author,
@@ -79,11 +81,10 @@ export const PostPageWidget: FC<post> = ({
   const searchBytag = (tag: string) => {
     dispatch(search(tag));
   };
-  console.log(imgUrl);
-  console.log(isImgFullscreen);
+
   return (
     <section className="p-5 lg:p-20 ">
-      <div className="flex gap-10 flex-col ">
+      <div className="flex flex-col ">
         <div className="flex flex-col  justify-between lg:flex-row ">
           <h1 className="text-2xl font-bold md:text-3xl lg:text-5xl">
             {title}
@@ -97,64 +98,73 @@ export const PostPageWidget: FC<post> = ({
           />
         </div>
 
-        <div className="flex flex-col gap-2">
-          <ul className="flex gap-2">
-            {tags?.map((tag, index) => (
-              <IconButton className="text-sm p-2">
-                <li
-                  key={index}
-                  className="cursor-pointer text-sm"
-                  onClick={() => {
-                    navigate('/search');
-                    searchBytag(tag);
-                  }}
-                >
-                  #{tag}
-                </li>
-              </IconButton>
-            ))}
-          </ul>
+        <ul className="flex gap-2">
+          {tags?.map((tag, index) => (
+            <IconButton
+              className="text-sm p-2"
+              key={index}
+              onClick={() => {
+                navigate('/search');
+                searchBytag(tag);
+              }}
+            >
+              <li key={index} className="cursor-pointer text-sm">
+                #{tag}
+              </li>
+            </IconButton>
+          ))}
+        </ul>
 
+        <div className="flex flex-col gap-2">
           <div>author: {author}</div>
           <div>author raiting : {authorRaiting} / 10</div>
-          <div>
-            <img
-              src={`${image[0]}`}
-              alt="image"
-              className="rounded-lg mt-10 mb-20 w-[300px] h-[450px] object-cover"
-            />
+        </div>
 
-            <span className="mb-20">{translate.t('img')}</span>
-
-            <div className="flex gap-2  w-full relative">
-              {isImgFullscreen && (
-                <div className="flex w-full  justify-center items-center fixed top-0 left-0 right-0 bottom-0 z-10 ">
-                  <img
-                    src={`${imgUrl}`}
-                    alt="image"
-                    onClick={() => setImgFullscreen(false)}
-                    className=" min-w-[750px] min-h-[750px] rounded-lg  object-cover cursor-pointer"
-                  />
-                </div>
-              )}
-              {image
-                .filter((img) => img !== image[0])
-                .map((url) => (
-                  <div>
-                    <img
-                      src={`${url}`}
-                      alt="image"
-                      onClick={() => handleFullscreen(url)}
-                      className=" w-[150px] h-[150px] rounded-lg mt-10 mb-20 object-cover cursor-pointer"
-                    />
-                  </div>
-                ))}
-            </div>
-            <ReactMarkdown children={text} />
-          </div>
+        <div className="preview">
+          <img
+            src={`${image[0]}`}
+            alt="image"
+            className="rounded-lg mt-10 mb-20 w-[300px] h-[450px] object-cover"
+          />
         </div>
 
         <div>
+          {image.filter((img) => img !== image[0]).length ? (
+            <div>{translate.t('img')}</div>
+          ) : (
+            ''
+          )}
+
+          {isImgFullscreen && (
+            <div className="flex w-full  justify-center items-center fixed top-0 left-0 right-0 bottom-0 z-10 ">
+              <img
+                src={`${imgUrl}`}
+                alt="image"
+                onClick={() => setImgFullscreen(false)}
+                className=" min-w-[750px] min-h-[750px] rounded-lg  object-cover cursor-pointer"
+              />
+            </div>
+          )}
+
+          <div className="flex gap-2">
+            {image
+              .filter((img) => img !== image[0])
+              .map((url, index) => (
+                <div key={index}>
+                  <img
+                    src={`${url}`}
+                    alt="image"
+                    onClick={() => handleFullscreen(url)}
+                    className=" w-[150px] h-[150px] rounded-lg mt-10 mb-20 object-cover cursor-pointer"
+                  />
+                </div>
+              ))}
+          </div>
+        </div>
+
+        <ReactMarkdown children={text} />
+
+        <div className="mt-10 mb-10">
           <div
             className="cursor-pointer flex items-center gap-2 max-w-[50px]"
             onClick={() => handleLike()}

@@ -54,12 +54,12 @@ const UpdateForm = () => {
     }
 
     dispatch(getPostById(id as string));
-  }, []);
+  }, [id]);
 
   return (
     <>
       {status && (
-        <Alert variant="outlined" severity="info">
+        <Alert variant="outlined" severity="info" className='mt-10'>
           {status}
         </Alert>
       )}
@@ -105,7 +105,7 @@ const UpdateForm = () => {
             <MenuItem value={9}>9</MenuItem>
             <MenuItem value={10}>10</MenuItem>
           </Select>
-          <div className="h-[400px]">
+          <div className="h-[400px] mb-10">
             <SimpleMDE
               value={text}
               onChange={changeText}
