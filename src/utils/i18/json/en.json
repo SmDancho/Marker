@@ -38,5 +38,7 @@
   "img": "Images",
   "register":"Register",
   "login":"Login",
+  "username":"username",
+  "password":"password",
   "or":"or"
 }

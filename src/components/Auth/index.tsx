@@ -38,13 +38,13 @@ export const Auth = () => {
         </div>
         <TextField
           id="username"
-          label="Username"
+          label={translate.t('username')}
           variant="outlined"
           onChange={(e) => setUserName(e.target.value)}
         />
         <TextField
           id="password"
-          label="Password"
+          label={translate.t('password')}
           variant="outlined"
           type="password"
           onChange={(e) => setPassword(e.target.value)}
