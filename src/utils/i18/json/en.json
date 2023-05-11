@@ -35,5 +35,8 @@
   "books": "Books",
   "movies": "Movies",
   "preview": "The first image will be set as preview",
-  "img": "Images"
+  "img": "Images",
+  "register":"Register",
+  "login":"Login",
+  "or":"or"
 }

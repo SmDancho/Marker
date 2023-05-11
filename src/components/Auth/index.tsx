@@ -11,13 +11,16 @@ import Alert from '@mui/material/Alert';
 
 import { GoogleAuth } from '../googleAuth';
 import { TwitchAuthComponent } from '../twitchAuth';
+
+import translate from '../../utils/i18/i18n';
+import { useTranslation } from 'react-i18next';
 export const Auth = () => {
   const [register, setRegister] = useState(false);
   const [username, setUserName] = useState('');
   const [password, setPassword] = useState('');
 
   const dispatch = useAppDispatch();
-
+  const { t } = useTranslation();
   const { status, isLoading } = useAppSelector(
     (state: RootState) => state.auth
   );
@@ -65,13 +68,13 @@ export const Auth = () => {
                 );
           }}
         >
-          {register ? 'Register' : 'Log in'}
+          {register ? translate.t('register') : translate.t('login')}
         </LoadingButton>
         <span
           className="cursor-pointer"
           onClick={() => setRegister((prev) => !prev)}
         >
-          or {register ? 'Log in' : 'Register'}
+          {translate.t("or")} {register ? translate.t('login') : translate.t('register')}
         </span>
       </form>
     </div>

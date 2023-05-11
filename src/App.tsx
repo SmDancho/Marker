@@ -1,13 +1,11 @@
 import { useState, useEffect } from 'react';
 import { useAppDispatch } from './redux/store';
-import {getme} from "./redux/auth"
 
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 
 import { Router } from './router';
 
 function App() {
-  const dispatch = useAppDispatch();
   const [mode, setMode] = useState<'light' | 'dark'>(
     (localStorage.getItem('theme') as 'light' | 'dark') || 'dark'
   );
@@ -17,7 +15,6 @@ function App() {
     },
   });
   useEffect(() => {
-    dispatch(getme())
     const handleStorageChange = () => {
       setMode(localStorage.getItem('theme') as 'light' | 'dark');
     };
