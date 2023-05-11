@@ -1,4 +1,4 @@
-import { useState, FC } from 'react';
+import { useState, FC, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import ReactMarkdown from 'react-markdown';
 
@@ -36,12 +36,17 @@ export const PostPageWidget: FC<post> = ({
   const { user, token } = useAppSelector((state) => state.auth);
 
   const [commentText, setCommentText] = useState<string>('');
+  const [isImgFullscreen, setImgFullscreen] = useState<boolean>(false);
+  const [imgUrl, setImgUrl] = useState<string>('');
 
   const [likesState, setLikes] = useState<string[]>(likes as string[]);
 
   const { t } = useTranslation();
   const avergeRaiting = useAvergeRaiting(raiting);
   const isLiked = likesState?.includes(user?._id as string);
+  useEffect(() => {
+    setLikes(likes);
+  }, [likes]);
 
   const handleLike = () => {
     if (!token) {
@@ -66,10 +71,16 @@ export const PostPageWidget: FC<post> = ({
     }
     rateValue && dispatch(addRaiting({ _id, value: rateValue as number }));
   };
+
+  const handleFullscreen = (url: string) => {
+    setImgFullscreen(true);
+    setImgUrl(url);
+  };
   const searchBytag = (tag: string) => {
     dispatch(search(tag));
   };
-  console.log(text);
+  console.log(imgUrl);
+  console.log(isImgFullscreen);
   return (
     <section className="p-5 lg:p-20 ">
       <div className="flex gap-10 flex-col ">
@@ -107,23 +118,34 @@ export const PostPageWidget: FC<post> = ({
           <div>author: {author}</div>
           <div>author raiting : {authorRaiting} / 10</div>
           <div>
-            {
-              <img
-                src={`${image[0]}`}
-                alt="image"
-                className="rounded-lg mt-10 mb-20 w-[300px] h-[450px] object-cover"
-              />
-            }
-            <span>{translate.t("img")}</span>
-            <div className="flex gap-2  w-full ">
+            <img
+              src={`${image[0]}`}
+              alt="image"
+              className="rounded-lg mt-10 mb-20 w-[300px] h-[450px] object-cover"
+            />
+
+            <span className="mb-20">{translate.t('img')}</span>
+
+            <div className="flex gap-2  w-full relative">
+              {isImgFullscreen && (
+                <div className="flex w-full  justify-center items-center fixed top-0 left-0 right-0 bottom-0 z-10 ">
+                  <img
+                    src={`${imgUrl}`}
+                    alt="image"
+                    onClick={() => setImgFullscreen(false)}
+                    className=" min-w-[750px] min-h-[750px] rounded-lg  object-cover cursor-pointer"
+                  />
+                </div>
+              )}
               {image
                 .filter((img) => img !== image[0])
-                .map((item) => (
+                .map((url) => (
                   <div>
                     <img
-                      src={`${item}`}
+                      src={`${url}`}
                       alt="image"
-                      className=" block w-[150px] h-[150px] rounded-lg mt-10 mb-20 object-cover"
+                      onClick={() => handleFullscreen(url)}
+                      className=" w-[150px] h-[150px] rounded-lg mt-10 mb-20 object-cover cursor-pointer"
                     />
                   </div>
                 ))}
