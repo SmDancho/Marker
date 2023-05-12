@@ -5,7 +5,6 @@ import ReactMarkdown from 'react-markdown';
 import { useAppDispatch, useAppSelector } from '../../redux/store';
 import { likePost, addComment, addRaiting, search } from '../../redux/posts';
 
-
 import ThumbUpAltIcon from '@mui/icons-material/ThumbUpAlt';
 import ThumbUpOutlinedIcon from '@mui/icons-material/ThumbUpOutlined';
 import SendIcon from '@mui/icons-material/Send';
@@ -98,7 +97,7 @@ export const PostPageWidget: FC<post> = ({
           />
         </div>
 
-        <ul className="flex gap-2">
+        <ul className="flex gap-2 mt-5 mb-5">
           {tags?.map((tag, index) => (
             <IconButton
               className="text-sm p-2"
