@@ -1,7 +1,10 @@
-import { useState, useEffect, useMemo, memo, lazy } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { FC } from 'react';
+
 import Button from '@mui/material/Button';
 import Avatar from '@mui/material/Avatar';
+import Tabs from '@mui/material/Tabs';
+import Tab from '@mui/material/Tab';
 
 import { useTranslation } from 'react-i18next';
 
@@ -10,7 +13,6 @@ import { logout, getUsers } from '../../redux/auth';
 import { getUserPosts } from '../../redux/posts';
 
 import { AllUsers } from '../../entities/allUsersCard';
-
 import { UserPosts } from '../userPosts';
 
 import translate from '../../utils/i18/i18n';
@@ -30,6 +32,7 @@ export const ProfileWidget: FC<props> = ({
   isAdmin,
   _id,
 }) => {
+  const [tabs, setTabs] = useState<number>(0);
   const dispatch = useAppDispatch();
   const { t } = useTranslation();
 
@@ -44,7 +47,10 @@ export const ProfileWidget: FC<props> = ({
   }, [status, _id]);
 
   const userLikes = useMemo(() => UserPost?.map((post) => post?.likes), []);
-
+  const handleChangeTabs = (event: React.SyntheticEvent, newValue: number) => {
+    console.log(newValue);
+    setTabs(newValue);
+  };
   return (
     <div>
       <div className="flex justify-between mt-5 items-center">
@@ -76,25 +82,35 @@ export const ProfileWidget: FC<props> = ({
           )}
         </div>
       </div>
-      <section className="mt-5">
+      <section className="mt-5 flex justify-between">
         <div>
           <Link to={'/create'}>
             <Button variant="outlined">{translate.t('createReview')}</Button>
           </Link>
         </div>
+        <Tabs
+          value={tabs}
+          onChange={handleChangeTabs}
+          aria-label="basic tabs example"
+        >
+          <Tab label={translate.t('posts')} />
+          {isAdmin && <Tab label={translate.t('users')} />}
+        </Tabs>
       </section>
 
-      <section className="flex gap-5 flex-wrap m-auto">
-        <UserPosts />
-      </section>
-
-      <section className="mt-5">
-        {isAdmin &&
-          allUsers
-            ?.filter((users) => users.username !== username)
-            .sort((a, b) => (a.username < b.username ? -1 : 1))
-            .map((user) => <AllUsers {...user} key={user._id} />)}
-      </section>
+      {tabs === 0 ? (
+        <section className="flex gap-5 flex-wrap m-auto">
+          <UserPosts />
+        </section>
+      ) : (
+        <section className="mt-5">
+          {isAdmin &&
+            allUsers
+              ?.filter((users) => users.username !== username)
+              .sort((a, b) => (a.username < b.username ? -1 : 1))
+              .map((user) => <AllUsers {...user} key={user._id} />)}
+        </section>
+      )}
     </div>
   );
 };
