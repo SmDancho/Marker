@@ -56,10 +56,10 @@ export const AllUsers: FC<props> = ({ username, _id, roles }) => {
   return (
     <>
       {toDelete && <ConfirmDiolg deleteFunction={handleDeleteUser} />}
-  
-      <div className="flex items-center shadow-xl  justify-between  mt-5 rounded-lg p-5 hover:bg-[#98c5f380] transition-all">
-        {username}
-        <div className="flex gap-2 items-center ">
+
+      <div className="flex  shadow-xl  flex-col lg:flex-row justify-between  mt-5 rounded-lg p-5 hover:bg-[#98c5f380] transition-all">
+        <div className="mb-2 lg:mb-0"> {username}</div>
+        <div className="flex gap-2 items-center flex-wrap">
           <Link to={`/user/${_id}`}>
             <Button variant="outlined">{translate.t('userProfile')}</Button>
           </Link>
@@ -71,7 +71,7 @@ export const AllUsers: FC<props> = ({ username, _id, roles }) => {
                 setTodelete((prev) => !prev);
               }}
             >
-             {translate.t("restore")}
+              {translate.t('restore')}
             </Button>
           ) : (
             <Button
