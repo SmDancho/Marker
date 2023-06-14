@@ -135,13 +135,18 @@ export const PostPageWidget: FC<post> = ({
           )}
 
           {isImgFullscreen && (
-            <div className="flex w-full  justify-center items-center fixed top-0 left-0 right-0 bottom-0 z-10 ">
-              <img
-                src={`${imgUrl}`}
-                alt="image"
+            <div className="flex justify-center items-center fixed top-0 left-0 right-0 bottom-0 z-10">
+              <div
+                className="cursor-pointer w-full h-full absolute bg-gray-500/75"
                 onClick={() => setImgFullscreen(false)}
-                className=" min-w-[750px] min-h-[750px] rounded-lg  object-cover cursor-pointer"
-              />
+              ></div>
+              <div className="max-w-[950px]  z-10 p-5">
+                <img
+                  src={`${imgUrl}`}
+                  alt="image"
+                  className=" w-full  rounded-lg  object-cover "
+                />
+              </div>
             </div>
           )}
 
