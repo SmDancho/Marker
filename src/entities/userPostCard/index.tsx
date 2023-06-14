@@ -31,10 +31,10 @@ export const UserPostCard: FC<post> = ({ title, _id }) => {
     <>
       {toDelete && <ConfirmDiolg deleteFunction={handleDeletePost} />}
 
-      <div className="flex  shadow-xl  flex-col lg:flex-row justify-between  mt-5 rounded-lg p-5 hover:bg-[#98c5f380] transition-all">
+      <div className="flex  shadow-xl    flex-col lg:flex-row justify-between  mt-5 rounded-lg p-5 hover:bg-[#98c5f380] transition-all">
         <div className="mb-2 lg:mb-0">{title}</div>
 
-        <div className="flex gap-2 items-center ">
+        <div className="flex gap-2 items-center flex-wrap">
           <Link to={`/Post/${_id}`}>
             <Button variant="outlined"> {translate.t('post')}</Button>
           </Link>

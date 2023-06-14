@@ -5,6 +5,10 @@ import Button from '@mui/material/Button';
 import Avatar from '@mui/material/Avatar';
 import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
+import TabPanel from '@mui/lab/TabPanel';
+import TabContext from '@mui/lab/TabContext';
+import LogoutIcon from '@mui/icons-material/Logout';
+import { IconButton } from '@mui/material';
 
 import { useTranslation } from 'react-i18next';
 
@@ -25,6 +29,10 @@ interface props {
   isAdmin?: boolean;
   paramsId?: string | undefined;
 }
+enum TabsPropety {
+  posts = 'posts',
+  users = 'users',
+}
 
 export const ProfileWidget: FC<props> = ({
   username,
@@ -32,7 +40,7 @@ export const ProfileWidget: FC<props> = ({
   isAdmin,
   _id,
 }) => {
-  const [tabs, setTabs] = useState<number>(0);
+  const [tabs, setTabs] = useState<TabsPropety>(TabsPropety.posts);
   const dispatch = useAppDispatch();
   const { t } = useTranslation();
 
@@ -47,20 +55,19 @@ export const ProfileWidget: FC<props> = ({
   }, [status, _id]);
 
   const userLikes = useMemo(() => UserPost?.map((post) => post?.likes), []);
-  const handleChangeTabs = (event: React.SyntheticEvent, newValue: number) => {
-    console.log(newValue);
+  const handleChangeTabs = (_: React.SyntheticEvent, newValue: TabsPropety) => {
     setTabs(newValue);
   };
   return (
     <div>
       <div className="flex justify-between mt-5 items-center">
         <div className="flex items-center gap-2">
-          <Avatar alt={`${username}`} />
+          <Avatar />
           <div>
-            <div className="flex gap-3">
+            <div>
               <div className="font-bold">{username}</div>
               {isAdmin && (
-                <span className="inline-flex items-center rounded-md bg-red-50 px-2 py-1 text-xs font-medium text-red-700 ring-1 ring-inset ring-red-600/10">
+                <span className="inline-flex items-center rounded-md bg-red-50 px-2  text-xs font-medium text-red-700  ring-inset ring-red-600/10">
                   Admin
                 </span>
               )}
@@ -69,48 +76,50 @@ export const ProfileWidget: FC<props> = ({
             <div>likes {userLikes[0]?.length}</div>
           </div>
         </div>
-        <div>
-          {createBtnVisible && (
-            <Button
-              variant="outlined"
-              onClick={() => {
-                dispatch(logout());
-              }}
-            >
-              {translate.t('logOut')}
-            </Button>
-          )}
-        </div>
+
+        {createBtnVisible && (
+          <IconButton
+            onClick={() => {
+              dispatch(logout());
+            }}
+          >
+            <LogoutIcon />
+          </IconButton>
+        )}
       </div>
-      <section className="mt-5 flex justify-between">
-        <div>
-          <Link to={'/create'}>
-            <Button variant="outlined">{translate.t('createReview')}</Button>
-          </Link>
-        </div>
-        <Tabs
-          value={tabs}
-          onChange={handleChangeTabs}
-          aria-label="basic tabs example"
-        >
-          <Tab label={translate.t('posts')} />
-          {isAdmin && <Tab label={translate.t('users')} />}
+      <section className="mt-5 flex flex-col justify-between  lg:flex-row lg:items-center">
+        <Tabs value={tabs} onChange={handleChangeTabs}>
+          <Tab label={translate.t('posts')} value={TabsPropety.posts} />
+          {isAdmin && (
+            <Tab label={translate.t('users')} value={TabsPropety.users} />
+          )}
         </Tabs>
+
+        <div className="flex gap-2 mt-5 lg:mt-0">
+          <div>
+            <Link to={'/create'}>
+              <Button variant="outlined">{translate.t('createReview')}</Button>
+            </Link>
+          </div>
+        </div>
       </section>
 
-      {tabs === 0 ? (
-        <section className="flex gap-5 flex-wrap m-auto">
-          <UserPosts />
-        </section>
-      ) : (
-        <section className="mt-5">
-          {isAdmin &&
-            allUsers
-              ?.filter((users) => users.username !== username)
-              .sort((a, b) => (a.username < b.username ? -1 : 1))
-              .map((user) => <AllUsers {...user} key={user._id} />)}
-        </section>
-      )}
+      <TabContext value={tabs}>
+        <TabPanel value={TabsPropety.posts} className="p-0">
+          <section className="flex gap-5 flex-wrap m-auto">
+            <UserPosts />
+          </section>
+        </TabPanel>
+        <TabPanel value={TabsPropety.users}>
+          <section className="mt-5">
+            {isAdmin &&
+              allUsers
+                ?.filter((users) => users.username !== username)
+                .sort((a, b) => (a.username < b.username ? -1 : 1))
+                .map((user) => <AllUsers {...user} key={user._id} />)}
+          </section>
+        </TabPanel>
+      </TabContext>
     </div>
   );
 };
