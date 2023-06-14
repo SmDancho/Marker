@@ -5,6 +5,8 @@ import Button from '@mui/material/Button';
 import Avatar from '@mui/material/Avatar';
 import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
+import TabPanel from '@mui/lab/TabPanel';
+import TabContext from '@mui/lab/TabContext';
 
 import { useTranslation } from 'react-i18next';
 
@@ -25,6 +27,10 @@ interface props {
   isAdmin?: boolean;
   paramsId?: string | undefined;
 }
+enum TabsPropety {
+  posts = 'posts',
+  users = 'users',
+}
 
 export const ProfileWidget: FC<props> = ({
   username,
@@ -32,7 +38,7 @@ export const ProfileWidget: FC<props> = ({
   isAdmin,
   _id,
 }) => {
-  const [tabs, setTabs] = useState<number>(0);
+  const [tabs, setTabs] = useState<TabsPropety>(TabsPropety.posts);
   const dispatch = useAppDispatch();
   const { t } = useTranslation();
 
@@ -47,8 +53,7 @@ export const ProfileWidget: FC<props> = ({
   }, [status, _id]);
 
   const userLikes = useMemo(() => UserPost?.map((post) => post?.likes), []);
-  const handleChangeTabs = (event: React.SyntheticEvent, newValue: number) => {
-    console.log(newValue);
+  const handleChangeTabs = (_: React.SyntheticEvent, newValue: TabsPropety) => {
     setTabs(newValue);
   };
   return (
@@ -82,7 +87,7 @@ export const ProfileWidget: FC<props> = ({
           )}
         </div>
       </div>
-      <section className="mt-5 flex justify-between">
+      <section className="mt-5 flex justify-between items-center">
         <div>
           <Link to={'/create'}>
             <Button variant="outlined">{translate.t('createReview')}</Button>
@@ -93,24 +98,29 @@ export const ProfileWidget: FC<props> = ({
           onChange={handleChangeTabs}
           aria-label="basic tabs example"
         >
-          <Tab label={translate.t('posts')} />
-          {isAdmin && <Tab label={translate.t('users')} />}
+          <Tab label={translate.t('posts')} value={TabsPropety.posts} />
+          {isAdmin && (
+            <Tab label={translate.t('users')} value={TabsPropety.users} />
+          )}
         </Tabs>
       </section>
 
-      {tabs === 0 ? (
-        <section className="flex gap-5 flex-wrap m-auto">
-          <UserPosts />
-        </section>
-      ) : (
-        <section className="mt-5">
-          {isAdmin &&
-            allUsers
-              ?.filter((users) => users.username !== username)
-              .sort((a, b) => (a.username < b.username ? -1 : 1))
-              .map((user) => <AllUsers {...user} key={user._id} />)}
-        </section>
-      )}
+      <TabContext value={tabs}>
+        <TabPanel value={TabsPropety.posts}>
+          <section className="flex gap-5 flex-wrap m-auto">
+            <UserPosts />
+          </section>
+        </TabPanel>
+        <TabPanel value={TabsPropety.users}>
+          <section className="mt-5">
+            {isAdmin &&
+              allUsers
+                ?.filter((users) => users.username !== username)
+                .sort((a, b) => (a.username < b.username ? -1 : 1))
+                .map((user) => <AllUsers {...user} key={user._id} />)}
+          </section>
+        </TabPanel>
+      </TabContext>
     </div>
   );
 };
