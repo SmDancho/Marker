@@ -40,5 +40,7 @@
   "login":"Login",
   "username":"username",
   "password":"password",
-  "or":"or"
+  "or":"or",
+  "posts": "posts",
+  "users": "users"
 }

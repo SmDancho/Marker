@@ -11,10 +11,9 @@ export const UserPosts = memo(() => {
 
   return (
     <>
-  
       <div className="flex flex-col w-full mt-5 mb-5">
-        Posts
         <Filter />
+
         {filtered.length ? (
           filtered.map((item) => <UserPostCard {...item} key={item._id} />)
         ) : (
