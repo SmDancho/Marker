@@ -94,7 +94,7 @@ export const ProfileWidget: FC<props> = ({
           aria-label="basic tabs example"
         >
           <Tab label={translate.t('posts')} />
-          <Tab label={translate.t('users')} />
+          {isAdmin && <Tab label={translate.t('users')} />}
         </Tabs>
       </section>
 
