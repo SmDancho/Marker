@@ -105,7 +105,7 @@ export const ProfileWidget: FC<props> = ({
       </section>
 
       <TabContext value={tabs}>
-        <TabPanel value={TabsPropety.posts} className="p-0">
+        <TabPanel value={TabsPropety.posts}>
           <section className="flex gap-5 flex-wrap m-auto">
             <UserPosts />
           </section>
