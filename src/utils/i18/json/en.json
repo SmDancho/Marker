@@ -42,5 +42,6 @@
   "password":"password",
   "or":"or",
   "posts": "posts",
-  "users": "users"
+  "users": "users",
+  "confirm": "confirm"
 }

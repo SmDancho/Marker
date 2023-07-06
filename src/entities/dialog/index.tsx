@@ -48,7 +48,7 @@ export const ConfirmDiolg: FC<props> = ({deleteFunction}) => {
             deleteFunction()
           }}
         >
-          {translate.t('delete')}
+          {translate.t('confirm')}
         </Button>
       </DialogActions>
     </Dialog>

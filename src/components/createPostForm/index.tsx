@@ -76,19 +76,15 @@ const PostForm = () => {
   };
 
   const autosavedValue = localStorage.getItem(`smde_demo`) || '';
-  const delay = 1000
+  const delay = 1000;
   const changeText = useCallback((value: string) => {
     setText(value);
   }, []);
   const textEditorOptions = useMemo(() => {
     return {
-      autofocus: true,
-      spellChecker: false,
-      autosave: {
-        enabled: true,
-        uniqueId: 'demo',
-        delay,
-      },
+      spellChecker: true,
+      indentWithTabs: false,
+      tabSize: 0,
     };
   }, [delay]);
 
