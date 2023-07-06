@@ -28,14 +28,14 @@ export const PostCard: FC<props> = ({
   return (
     <Link to={`/Post/${_id}`}>
       <div className=" flex mt-10 justify-between m-auto flex-col rounded-lg cursor-pointer lg:flex-row ">
-        <div className=" rounded-lg max-w-[500px]">
+        <div className="rounded-lg w-[250px] h-[300px]">
           <img
             src={`${image[0]}`}
-            alt=""
-            className="block rounded-l-lg max-w-full"
+            alt="preview"
+            className="block rounded-l-lg w-full h-full object-cover"
           />
         </div>
-        <div className="px-5 flex flex-col justify-between gap-2 w-full">
+        <div className="flex flex-col justify-between gap-2 w-full lg:pl-4">
           <div className="flex flex-col justify-between items-start w-full lg:flex-row lg:items-center ">
             <div className="font-bold text-xl lg:text-3xl">{title}</div>
             <Rating name="simple-controlled" value={avergeRaiting} readOnly />
